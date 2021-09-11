@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>domPanZoom HTML demos</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link href="./demo.css" rel="stylesheet" />
+    <link href="../../dist/domPanZoom.css" rel="stylesheet" />
+    <script src="../../dist/domPanZoom.js"></script>
+  </head>
+
+  <body>
+    <div class="demo__wrapper">
+      <!-- Demo image -->
+
+      <div class="demo__container">
+        <h2>Image</h2>
+
+        <div id="domPanZoom__demo-image"></div>
+        <script>
+          new domPanZoom({
+            targetElementID: "domPanZoom__demo-image",
+          });
+        </script>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "dompanzoom-es6-demo",
+  "description": "",
+  "version": "1.0.0",
+  "author": "Stephan Wagner <stephanwagner.me@gmail.com> (https://stephanwagner.me)",
+  "license": "MIT",
+  "main": "index.js",
+  "dependencies": {
+    "dompanzoom": "0.0.1"
+  },
+  "devDependencies": {
+    "snowpack": "^3.8.3"
+  },
+  "scripts": {
+    "start": "snowpack dev"
+  }
+}
