@@ -1,43 +1,43 @@
 /*! domPanZoom | https://github.com/StephanWagner/domPanZoom | MIT License | Copyright Stephan Wagner | https://stephanwagner.me */
-var domPanZoom = function (options) {
-  // Default options, pass a custom options object to override
-  var defaultOptions = {
-    // The element to render the map in
-    targetElementID: "",
+// Wrapper function
+function domPanZoomWrapper() {
+  var domPanZoom = function (options) {
+    // Default options, pass a custom options object to override
+    var defaultOptions = {
+      // The element to render the map in
+      targetElementID: '',
 
-    // Minimum and maximum zoom
-    minZoom: 1,
-    maxZoom: 25,
+      // Minimum and maximum zoom
+      minZoom: 1,
+      maxZoom: 25
+    };
+
+    this.options = Object.assign({}, defaultOptions, options || {});
+
+    this.init();
   };
 
-  this.options = Object.assign({}, defaultOptions, options || {});
+  // Initialize
+  domPanZoom.prototype.init = function () {
+    console.log(this.options);
+  };
 
-  this.init();
-};
-
-// Initialize
-domPanZoom.prototype.init = function () {
-  console.log(this.options);
-};
+  return domPanZoom;
+}
 
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
-      // AMD. Register as an anonymous module.
-      define(['exports', 'dom-pan-zoom'], factory);
-  } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
-      // CommonJS
-      factory(exports, require('dom-pan-zoom'));
+    define(['dompanzoom'], function () {
+      return (root.domPanZoom = factory());
+    });
+  } else if (typeof module === 'object' && module.exports) {
+    module.exports = root.domPanZoom = factory();
   } else {
-      // Browser globals
-      factory((root.commonJsStrict = {}), root.domPanZoom);
+    root.domPanZoom = factory();
   }
-}(typeof self !== 'undefined' ? self : this, function (exports, domPanZoom) {
-
-  //domPanZoom.init();
-
-  // attach properties to the exports object to define
-  // the exported module properties.
-  exports.action = function () {};
-}));
+})(this, function () {
+  var domPanZoom = domPanZoomWrapper();
+  return domPanZoom;
+});
 
 //# sourceMappingURL=domPanZoom.js.map
