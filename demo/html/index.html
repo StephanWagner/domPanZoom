@@ -16,12 +16,38 @@
       <!-- Demo image -->
 
       <div class="demo__container">
+        <br />
         <h2>Image</h2>
 
-        <div id="domPanZoom__demo-image"></div>
+        <div id="prototype__wrapper">
+          <img id="prototype__container" src="SAM_2726-E.JPG" />
+        </div>
+
+        <div style="text-align: center">
+          <button onclick="myPanZoom.setCenter()">Set center</button>
+          <button onclick="myPanZoom.zoomIn()">Zoom in</button>
+        </div>
+
+        <style>
+          #prototype__wrapper {
+            width: 500px;
+            height: 350px;
+            margin: 50px auto;
+            overflow: hidden;
+            border: 2px solid red;
+          }
+
+          #prototype__container {
+            display: block;
+            width: 800px;
+            height: 400px;
+          }
+        </style>
+
         <script>
-          new domPanZoom({
-            targetElementID: "domPanZoom__demo-image",
+          var myPanZoom = new domPanZoom({
+            wrapperElementID: 'prototype__wrapper',
+            panZoomElementID: 'prototype__container'
           });
         </script>
       </div>
