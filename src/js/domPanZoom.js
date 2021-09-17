@@ -14,7 +14,7 @@ function domPanZoomWrapper() {
 
       // Minimum and maximum zoom
       minZoom: 1,
-      maxZoom: 25,
+      maxZoom: 10,
 
       // TODO The size of the panZoomElement in percent when zoom is at maxZoom value
       maxZoomPercent: 500,
@@ -37,34 +37,47 @@ function domPanZoomWrapper() {
   domPanZoom.prototype.init = function () {
     // Set center position
     this.options.center && this.center(true);
+
+    var theEvent = function (ev) {
+      this.x += ev.movementX;
+      this.y += ev.movementY;
+      this.setPosition(true);
+    }.bind(this);
+
+    this.getWrapper().addEventListener('mousedown', function (ev) {
+      ev.preventDefault();
+      this.getWrapper().addEventListener('mousemove', theEvent, {
+        passive: true
+      });
+    }.bind(this));
+
+    document.addEventListener('mouseup', function () {
+      this.getWrapper().removeEventListener('mousemove', theEvent, {
+        passive: true
+      });
+    }.bind(this));
   };
 
   // Initialize
-  domPanZoom.prototype.setPosition = function (pos, instant) {
+  domPanZoom.prototype.setPosition = function (instant) {
     this.transition(!instant);
 
     this.getContainer().style.transform =
       'matrix(' +
-      pos.zoom +
+      this.zoom +
       ', 0, 0, ' +
-      pos.zoom +
+      this.zoom +
       ', ' +
-      pos.x +
+      this.x +
       ', ' +
-      pos.y +
+      this.y +
       ')';
   };
 
   // Zoom in
   domPanZoom.prototype.zoomIn = function (zoom, instant) {
-    this.setPosition(
-      {
-        x: 0,
-        y: 0,
-        zoom: 0.1
-      },
-      instant
-    );
+    this.zoom = 2;
+    this.setPosition(instant);
   };
 
   // Center container within wrapper
@@ -73,14 +86,10 @@ function domPanZoomWrapper() {
     var diffY =
       this.getWrapper().clientHeight - this.getContainer().clientHeight;
 
-    this.setPosition(
-      {
-        zoom: 1,
-        x: diffX * 0.5,
-        y: diffY * 0.5
-      },
-      instant
-    );
+    this.zoom = 1;
+    this.x = diffX * 0.5;
+    this.y = diffY * 0.5;
+    this.setPosition(instant);
   };
 
   // Get the wrapper element
@@ -139,7 +148,6 @@ function domPanZoomWrapper() {
 
   // Enable or disable transitions
   domPanZoom.prototype.transition = function (enabled) {
-    console.log(enabled);
     this.getContainer().style.transition = enabled ? 'transform 400ms' : 'none';
   };
 
