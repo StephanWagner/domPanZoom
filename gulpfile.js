@@ -1,6 +1,4 @@
 var gulp = require('gulp');
-var sass = require('gulp-sass')(require('sass'));
-var cleanCSS = require('gulp-clean-css');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
@@ -8,14 +6,6 @@ var sourcemaps = require('gulp-sourcemaps');
 var header = require('gulp-header');
 
 var fileHeader = '/*! domPanZoom | https://github.com/StephanWagner/domPanZoom | MIT License | Copyright Stephan Wagner | https://stephanwagner.me */' + "\n";
-
-// CSS
-var styles = [{
-  name: 'domPanZoom',
-  src: ['./src/scss/main.scss'],
-  srcWatch: ['./src/scss/**/*.scss'],
-  dest: './dist/'
-}];
 
 // JavaScript
 var scripts = [{
@@ -31,58 +21,6 @@ var scripts = [{
 let defaultTasks = [];
 let buildTasks = [];
 let watchTasks = [];
-
-// Config CSS tasks
-for (const item of styles) {
-
-  // Concat CSS
-  const cssConcat = function () {
-    return gulp
-      .src(item.src)
-      .pipe(sourcemaps.init())
-      .pipe(sass({
-        outputStyle: 'expanded'
-      }).on('error', sass.logError))
-      .pipe(concat(item.name + '.css'))
-      .pipe(header(fileHeader))
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest(item.dest));
-  };
-
-  // Store as a task
-  gulp.task('cssConcat-' + item.name, cssConcat);
-
-  // Add to default tasks
-  defaultTasks.push('cssConcat-' + item.name);
-
-  // Add to watch tasks
-  watchTasks.push({
-    src: item.srcWatch ? item.srcWatch : item.src,
-    task: cssConcat
-  });
-
-  // Build CSS
-  const cssBuild = function () {
-    return gulp
-      .src(item.dest + item.name + '.css')
-      .pipe(rename(item.name + '.min.css'))
-      .pipe(cleanCSS({
-        level: {
-          1: {
-            specialComments: 0
-          }
-        }
-      }))
-      .pipe(header(fileHeader))
-      .pipe(gulp.dest(item.dest));
-  };
-
-  // Store as a task
-  gulp.task('cssBuild-' + item.name, cssBuild);
-
-  // Add to build tasks
-  buildTasks.push('cssBuild-' + item.name);
-}
 
 // Config JavaScript tasks
 for (let item of scripts) {
