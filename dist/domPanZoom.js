@@ -36,6 +36,9 @@ function domPanZoomWrapper() {
 
   // Initialize
   domPanZoom.prototype.init = function () {
+    // Add styles
+    this.getWrapper().style.cursor = 'grab';
+
     // Attach events
     this.attachEvents();
 
@@ -70,6 +73,8 @@ function domPanZoomWrapper() {
       'mousedown',
       function (ev) {
         ev.preventDefault();
+        document.body.style.cursor = 'grabbing';
+        this.getWrapper().style.cursor = 'grabbing';
         document.addEventListener('mousemove', setPositionEvent, {
           passive: true
         });
@@ -80,6 +85,8 @@ function domPanZoomWrapper() {
       'mouseup',
       function () {
         this.previousEvent = null;
+        document.body.style.cursor = 'unset';
+        this.getWrapper().style.cursor = 'grab';
         document.removeEventListener('mousemove', setPositionEvent, {
           passive: true
         });
