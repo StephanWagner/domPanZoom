@@ -14,7 +14,7 @@ function domPanZoomWrapper() {
       center: true,
 
       // Minimum and maximum zoom
-      minZoom: 0,
+      minZoom: 1,
       maxZoom: 25,
 
       // TODO The size of the panZoomElement in percent when zoom is at maxZoom value
@@ -37,18 +37,18 @@ function domPanZoomWrapper() {
   // Initialize
   domPanZoom.prototype.init = function () {
     // Set center position
-    this.options.center && this.setCenter();
+    this.options.center && this.center(true);
   };
 
   // Initialize
-  domPanZoom.prototype.setPosition = function (pos) {
-    var containerElement = this.getContainer();
+  domPanZoom.prototype.setPosition = function (pos, instant) {
+    this.transition(!instant);
 
-    containerElement.style.transform =
+    this.getContainer().style.transform =
       'matrix(' +
-      (pos.zoom + 1) +
+      pos.zoom +
       ', 0, 0, ' +
-      (pos.zoom + 1) +
+      pos.zoom +
       ', ' +
       pos.x +
       ', ' +
@@ -57,38 +57,31 @@ function domPanZoomWrapper() {
   };
 
   // Zoom in
-  domPanZoom.prototype.zoomIn = function (zoom) {
-    console.log(zoom);
+  domPanZoom.prototype.zoomIn = function (zoom, instant) {
+    this.setPosition(
+      {
+        x: 0,
+        y: 0,
+        zoom: 0.1
+      },
+      instant
+    );
   };
 
   // Center container within wrapper
-  domPanZoom.prototype.setCenter = function () {
-    var wrapperBounding = this.getBoundingClientRect(this.getWrapper());
-    var containerBounding = this.getBoundingClientRect(this.getContainer());
+  domPanZoom.prototype.center = function (instant) {
+    var diffX = this.getWrapper().clientWidth - this.getContainer().clientWidth;
+    var diffY =
+      this.getWrapper().clientHeight - this.getContainer().clientHeight;
 
-    var diffX = wrapperBounding.width - containerBounding.width;
-    var diffY = wrapperBounding.height - containerBounding.height;
-
-    this.setPosition({
-      zoom: 0,
-      x: diffX * 0.5,
-      y: diffY * 0.5
-    });
-  };
-
-  // Center container within wrapper
-  domPanZoom.prototype.setCenter = function () {
-    var wrapperBounding = this.getBoundingClientRect(this.getWrapper());
-    var containerBounding = this.getBoundingClientRect(this.getContainer());
-
-    var diffX = wrapperBounding.width - containerBounding.width;
-    var diffY = wrapperBounding.height - containerBounding.height;
-
-    this.setPosition({
-      zoom: 0,
-      x: diffX * 0.5,
-      y: diffY * 0.5
-    });
+    this.setPosition(
+      {
+        zoom: 1,
+        x: diffX * 0.5,
+        y: diffY * 0.5
+      },
+      instant
+    );
   };
 
   // Get the wrapper element
@@ -145,9 +138,10 @@ function domPanZoomWrapper() {
     return null;
   };
 
-  // Wrapper for native JavaScripts getBoundingClientRect
-  domPanZoom.prototype.getBoundingClientRect = function (element) {
-    return element.getBoundingClientRect();
+  // Enable or disable transitions
+  domPanZoom.prototype.transition = function (enabled) {
+    console.log(enabled);
+    this.getContainer().style.transition = enabled ? 'transform 400ms' : 'none';
   };
 
   return domPanZoom;
