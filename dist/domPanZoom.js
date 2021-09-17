@@ -98,6 +98,8 @@ function domPanZoomWrapper() {
       'touchstart',
       function (ev) {
         ev.preventDefault();
+        document.body.style.cursor = 'grabbing';
+        this.getWrapper().style.cursor = 'grabbing';
         document.addEventListener('touchmove', setPositionEvent, {
           passive: true
         });
@@ -108,6 +110,8 @@ function domPanZoomWrapper() {
       'touchend',
       function () {
         this.previousEvent = null;
+        document.body.style.cursor = 'unset';
+        this.getWrapper().style.cursor = 'grab';
         document.removeEventListener('touchmove', setPositionEvent, {
           passive: true
         });
