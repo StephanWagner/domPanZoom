@@ -35,27 +35,75 @@ function domPanZoomWrapper() {
 
   // Initialize
   domPanZoom.prototype.init = function () {
+    // Attach events
+    this.attachEvents();
+
     // Set center position
     this.options.center && this.center(true);
+  };
 
-    var theEvent = function (ev) {
-      this.x += ev.movementX;
-      this.y += ev.movementY;
+  // Attach events
+  domPanZoom.prototype.attachEvents = function (instant) {
+    var setPositionEvent = function (ev) {
+      var event = ev;
+      if (ev.touches && ev.touches.length) {
+        event = ev.touches[0];
+      }
+
+      var movementX = 0;
+      var movementY = 0;
+
+      if (this.previousEvent) {
+        movementX = event.pageX - this.previousEvent.pageX;
+        movementY = event.pageY - this.previousEvent.pageY;
+      }
+
+      this.x += movementX;
+      this.y += movementY;
       this.setPosition(true);
+
+      this.previousEvent = event;
     }.bind(this);
 
-    this.getWrapper().addEventListener('mousedown', function (ev) {
-      ev.preventDefault();
-      this.getWrapper().addEventListener('mousemove', theEvent, {
-        passive: true
-      });
-    }.bind(this));
+    this.getWrapper().addEventListener(
+      'mousedown',
+      function (ev) {
+        ev.preventDefault();
+        document.addEventListener('mousemove', setPositionEvent, {
+          passive: true
+        });
+      }.bind(this)
+    );
 
-    document.addEventListener('mouseup', function () {
-      this.getWrapper().removeEventListener('mousemove', theEvent, {
-        passive: true
-      });
-    }.bind(this));
+    document.addEventListener(
+      'mouseup',
+      function () {
+        this.previousEvent = null;
+        document.removeEventListener('mousemove', setPositionEvent, {
+          passive: true
+        });
+      }.bind(this)
+    );
+
+    this.getWrapper().addEventListener(
+      'touchstart',
+      function (ev) {
+        ev.preventDefault();
+        document.addEventListener('touchmove', setPositionEvent, {
+          passive: true
+        });
+      }.bind(this)
+    );
+
+    document.addEventListener(
+      'touchend',
+      function () {
+        this.previousEvent = null;
+        document.removeEventListener('touchmove', setPositionEvent, {
+          passive: true
+        });
+      }.bind(this)
+    );
   };
 
   // Initialize
