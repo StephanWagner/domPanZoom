@@ -48,7 +48,7 @@ function domPanZoomWrapper() {
   };
 
   // Attach events
-  domPanZoom.prototype.attachEvents = function (instant) {
+  domPanZoom.prototype.attachEvents = function () {
     var setPositionEvent = function (ev) {
       var event = ev;
       if (ev.touches && ev.touches.length) {
