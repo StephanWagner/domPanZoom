@@ -37,6 +37,7 @@ function domPanZoomWrapper() {
   domPanZoom.prototype.init = function () {
     // Add styles
     this.getWrapper().style.cursor = 'grab';
+    this.getWrapper().style.overflow = 'hidden';
 
     // Attach events
     this.attachEvents();
