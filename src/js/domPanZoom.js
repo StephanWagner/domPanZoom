@@ -85,7 +85,7 @@ function domPanZoomWrapper() {
       'mouseup',
       function () {
         this.previousEvent = null;
-        document.body.style.cursor = 'unset';
+        document.body.style.cursor = null;
         this.getWrapper().style.cursor = 'grab';
         document.removeEventListener('mousemove', setPositionEvent, {
           passive: true
@@ -109,7 +109,7 @@ function domPanZoomWrapper() {
       'touchend',
       function () {
         this.previousEvent = null;
-        document.body.style.cursor = 'unset';
+        document.body.style.cursor = null;
         this.getWrapper().style.cursor = 'grab';
         document.removeEventListener('touchmove', setPositionEvent, {
           passive: true
@@ -208,7 +208,7 @@ function domPanZoomWrapper() {
 
   // Enable or disable transitions
   domPanZoom.prototype.transition = function (enabled) {
-    this.getContainer().style.transition = enabled ? 'transform 400ms' : 'none';
+    this.getContainer().style.transition = enabled ? 'transform 400ms' : null;
   };
 
   return domPanZoom;
