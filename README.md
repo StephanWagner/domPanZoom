@@ -14,5 +14,4 @@ npm install --save dompanzoom
 
 ```javascript
 import domPanZoom from 'dompanzoom';
-import 'dompanzoom/dist/domPanZoom.min.css';
 ```
