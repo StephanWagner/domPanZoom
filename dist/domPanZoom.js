@@ -21,7 +21,7 @@ function domPanZoomWrapper() {
       maxZoomPercent: 500,
 
       // Initial zoom
-      initialZoom: 0
+      initialZoom: 1
 
       // TODO Initial panX
       // TODO Initial panY
