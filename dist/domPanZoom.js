@@ -43,6 +43,9 @@ function domPanZoomWrapper() {
     // Attach events
     this.attachEvents();
 
+    // Set initial zoom
+    this.zoomTo(this.options.initialZoom, true);
+
     // Set center position
     this.options.center && this.center(true);
   };
@@ -135,21 +138,29 @@ function domPanZoomWrapper() {
       ')';
   };
 
+  // Zoom to
+  domPanZoom.prototype.zoomTo = function (zoom, instant) {
+    this.zoom = zoom;
+    console.log(zoom);
+    this.setPosition(instant);
+  };
+
   // Zoom in
   domPanZoom.prototype.zoomIn = function (zoom, instant) {
-    this.zoom = 2;
+    this.zoom = 2; // TODO
     this.setPosition(instant);
   };
 
   // Center container within wrapper
   domPanZoom.prototype.center = function (instant) {
-    var diffX = this.getWrapper().clientWidth - this.getContainer().clientWidth;
-    var diffY =
-      this.getWrapper().clientHeight - this.getContainer().clientHeight;
+    var wrapper = this.getWrapper();
+    var container = this.getContainer();
 
-    this.zoom = 1;
+    var diffX = wrapper.clientWidth - container.clientWidth;
+    var diffY = wrapper.clientHeight - container.clientHeight;
     this.x = diffX * 0.5;
     this.y = diffY * 0.5;
+
     this.setPosition(instant);
   };
 
