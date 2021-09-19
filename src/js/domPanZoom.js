@@ -13,7 +13,7 @@ function domPanZoomWrapper() {
       center: true,
 
       // Minimum and maximum zoom
-      minZoom: 1,
+      minZoom: 0.1,
       maxZoom: 10,
 
       // How many percent to zoom with zoomIn and zoomOut
@@ -186,14 +186,10 @@ function domPanZoomWrapper() {
     }
     step = step || this.options.zoomStep;
 
-    // TODO adjust for zoom values < 1, we should use the percent from 0 to 1 then
-
+    // Calculate nextZoom
     var currentZoom = this.zoom;
     var zoomStep = (100 + step) / 100;
     var nextZoom = currentZoom * (direction === 'out' ? 1 / zoomStep : zoomStep);
-
-    console.log(nextZoom);
-
     nextZoom = this.sanitizeZoom(nextZoom);
 
     // TODO adjust boundings to zoom centered
