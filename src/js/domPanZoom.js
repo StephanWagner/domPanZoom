@@ -16,8 +16,8 @@ function domPanZoomWrapper() {
       minZoom: 1,
       maxZoom: 10,
 
-      // How far to zoom in percent using zoomIn, zoomOut
-      zoomStep: 10,
+      // How many percent to zoom with zoomIn and zoomOut
+      zoomStep: 50,
 
       // Initial zoom
       initialZoom: 1,
@@ -159,13 +159,12 @@ function domPanZoomWrapper() {
       zoom = this.options.maxZoom;
     }
 
-    this.zoom = zoom;
     return zoom;
   };
 
   // Zoom to
   domPanZoom.prototype.zoomTo = function (zoom, instant) {
-    this.sanitizeZoom(zoom);
+    this.zoom = this.sanitizeZoom(zoom);
     this.setPosition(instant);
   };
 
@@ -185,14 +184,41 @@ function domPanZoomWrapper() {
       instant = step;
       step = null;
     }
-    step = step || this.options.zoomStep;
-    // TODO adjust for zoom values < 1
-    // When < 1 we should use the percent from 0 to 1
-    var zoomDiff = this.options.maxZoom - this.options.minZoom;
-    stepValue = (zoomDiff * step) / 100;
-    var zoom = this.zoom + stepValue * (direction === 'out' ? -1 : 1);
 
-    this.sanitizeZoom(zoom);
+    // TODO adjust for zoom values < 1, we should use the percent from 0 to 1 then
+
+    var currentZoom = this.zoom;
+    var zoomStep = (100 + this.options.zoomStep) / 100;
+    var nextZoom = this.zoom * (direction === 'out' ? 1 / zoomStep : zoomStep);
+
+    console.log(nextZoom);
+
+    nextZoom = this.sanitizeZoom(nextZoom);
+
+    // TODO adjust boundings to zoom centered
+
+    // // Get center
+    // var wrapper = this.getWrapper();
+    // var container = this.getContainer();
+
+    // var diffX = wrapper.clientWidth - container.clientWidth;
+    // var diffY = wrapper.clientHeight - container.clientHeight;
+    // this.x = diffX * 0.5;
+    // this.y = diffY * 0.5;
+
+    //   var currentZoom = this.zoom;
+    //   var nextZoom = zoom;
+    //   var zoomDiff = nextZoom - currentZoom;
+
+    //   var wrapperBounding = this.getWrapper().getBoundingClientRect();
+    //   var panZoomBounding = this.getContainer().getBoundingClientRect();
+
+    //   console.log(panZoomBounding, panZoomBounding);
+
+    //   console.log('zoomDiff', zoomDiff);
+
+    this.zoom = nextZoom;
+
     this.setPosition(instant);
   };
 
