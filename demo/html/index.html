@@ -43,6 +43,31 @@
             height: 350px;
             margin: 50px auto;
             border: 2px solid red;
+            position: relative;
+          }
+
+          #prototype__wrapper:before,
+          #prototype__wrapper:after {
+            content: '';
+            position: absolute;
+            z-index: 200;
+            background: rgba(255, 0, 0, 0.75);
+          }
+
+          #prototype__wrapper:before {
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            transform: translateY(-50%);
+          }
+
+          #prototype__wrapper:after {
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            transform: translateX(-50%);
           }
 
           #prototype__container {
