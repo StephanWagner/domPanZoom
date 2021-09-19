@@ -185,12 +185,13 @@ function domPanZoomWrapper() {
       instant = step;
       step = null;
     }
+    step = step || this.options.zoomStep;
 
     // TODO adjust for zoom values < 1, we should use the percent from 0 to 1 then
 
     var currentZoom = this.zoom;
-    var zoomStep = (100 + this.options.zoomStep) / 100;
-    var nextZoom = this.zoom * (direction === 'out' ? 1 / zoomStep : zoomStep);
+    var zoomStep = (100 + step) / 100;
+    var nextZoom = currentZoom * (direction === 'out' ? 1 / zoomStep : zoomStep);
 
     console.log(nextZoom);
 
