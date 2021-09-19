@@ -9,7 +9,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.demo-wrapper {
+.demo__wrapper {
   box-sizing: border-box;
   width: 800px;
   max-width: calc(100% - 30px);
@@ -17,8 +17,12 @@ body {
   padding: 30px 0 0;
 }
 
-.demo-container {
+.demo__container {
   padding: 0 0 80px;
+}
+
+.demo__container button {
+  margin: 5px;
 }
 
 h2 {

@@ -23,8 +23,18 @@
         </div>
 
         <div style="text-align: center">
-          <button onclick="myPanZoom.center()">Set center</button>
+          <button onclick="myPanZoom.zoomTo(1)">Zoom to 1</button>
+          <button onclick="myPanZoom.zoomTo(2)">Zoom to 2</button>
+          <button onclick="myPanZoom.zoomTo(5)">Zoom to 5</button>
+          <button onclick="myPanZoom.zoomTo(20)">Zoom to 20</button>
+          <button onclick="myPanZoom.zoomTo(0.5)">Zoom to 0.5</button>
+          <button onclick="myPanZoom.zoomTo(-1)">Zoom to -1</button>
+          <br />
           <button onclick="myPanZoom.zoomIn()">Zoom in</button>
+          <button onclick="myPanZoom.zoomIn(50)">Zoom in by 50%</button>
+          <button onclick="myPanZoom.zoomOut()">Zoom out</button>
+          <br />
+          <button onclick="myPanZoom.center()">Set center</button>
         </div>
 
         <style>

@@ -17,11 +17,15 @@ function domPanZoomWrapper() {
       minZoom: 1,
       maxZoom: 10,
 
-      // TODO The size of the panZoomElement in percent when zoom is at maxZoom value
-      maxZoomPercent: 500,
+      // How far to zoom in percent using zoomIn, zoomOut
+      zoomStep: 10,
 
       // Initial zoom
-      initialZoom: 1
+      initialZoom: 1,
+
+      // Bounds
+      bounds: true,
+      boundsOffset: 0.1
 
       // TODO Initial panX
       // TODO Initial panY
@@ -126,6 +130,12 @@ function domPanZoomWrapper() {
   domPanZoom.prototype.setPosition = function (instant) {
     this.transition(!instant);
 
+    // Check bounds
+    if (this.options.bounds) {
+      console.log(this.x, this.y);
+    }
+
+    // Set position
     this.getContainer().style.transform =
       'matrix(' +
       this.zoom +
@@ -138,16 +148,52 @@ function domPanZoomWrapper() {
       ')';
   };
 
+  // Sanitize zoom value
+  domPanZoom.prototype.sanitizeZoom = function (zoom) {
+    // Adjust for minZoom
+    if (zoom < this.options.minZoom) {
+      zoom = this.options.minZoom;
+    }
+
+    // Adjust for maxZoom
+    if (zoom > this.options.maxZoom) {
+      zoom = this.options.maxZoom;
+    }
+
+    this.zoom = zoom;
+    return zoom;
+  };
+
   // Zoom to
   domPanZoom.prototype.zoomTo = function (zoom, instant) {
-    this.zoom = zoom;
-    console.log(zoom);
+    this.sanitizeZoom(zoom);
     this.setPosition(instant);
   };
 
   // Zoom in
-  domPanZoom.prototype.zoomIn = function (zoom, instant) {
-    this.zoom = 2; // TODO
+  domPanZoom.prototype.zoomIn = function (step, instant) {
+    this.zoomInOut(step, instant, 'in');
+  };
+
+  // Zoom out
+  domPanZoom.prototype.zoomOut = function (step, instant) {
+    this.zoomInOut(step, instant, 'out');
+  };
+
+  // Zoom in or out
+  domPanZoom.prototype.zoomInOut = function (step, instant, direction) {
+    if (step === true || step === false) {
+      instant = step;
+      step = null;
+    }
+    step = step || this.options.zoomStep;
+    // TODO adjust for zoom values < 1
+    // When < 1 we should use the percent from 0 to 1
+    var zoomDiff = this.options.maxZoom - this.options.minZoom;
+    stepValue = (zoomDiff * step) / 100;
+    var zoom = this.zoom + stepValue * (direction === 'out' ? -1 : 1);
+
+    this.sanitizeZoom(zoom);
     this.setPosition(instant);
   };
 
