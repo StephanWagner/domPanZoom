@@ -16,8 +16,11 @@ function domPanZoomWrapper() {
       minZoom: 0.1,
       maxZoom: 10,
 
-      // How many percent to zoom with zoomIn and zoomOut
+      // How many percent to zoom with methods zoomIn and zoomOut
       zoomStep: 50,
+
+      // The speed in wich zo zoom when using mouse wheel
+      zoomWheelSpeed: 1,
 
       // Initial zoom
       initialZoom: 1,
@@ -56,6 +59,7 @@ function domPanZoomWrapper() {
 
   // Attach events
   domPanZoom.prototype.attachEvents = function () {
+    // Event while mouse moving
     var setPositionEvent = function (ev) {
       var event = ev;
       if (ev.touches && ev.touches.length) {
@@ -77,53 +81,54 @@ function domPanZoomWrapper() {
       this.previousEvent = event;
     }.bind(this);
 
-    this.getWrapper().addEventListener(
-      'mousedown',
-      function (ev) {
-        ev.preventDefault();
-        document.body.style.cursor = 'grabbing';
-        this.getWrapper().style.cursor = 'grabbing';
-        document.addEventListener('mousemove', setPositionEvent, {
-          passive: true
-        });
-      }.bind(this)
-    );
+    // Mouse down or touchstart event
+    var mouseDownTouchStartEvent = function (ev) {
+      ev.preventDefault();
+      document.body.style.cursor = 'grabbing';
+      this.getWrapper().style.cursor = 'grabbing';
+      document.addEventListener('mousemove', setPositionEvent, {
+        passive: true
+      });
+    }.bind(this);
 
-    document.addEventListener(
-      'mouseup',
-      function () {
-        this.previousEvent = null;
-        document.body.style.cursor = null;
-        this.getWrapper().style.cursor = 'grab';
-        document.removeEventListener('mousemove', setPositionEvent, {
-          passive: true
-        });
-      }.bind(this)
-    );
+    this.getWrapper().addEventListener('mousedown', mouseDownTouchStartEvent);
+    this.getWrapper().addEventListener('touchstart', mouseDownTouchStartEvent);
 
-    this.getWrapper().addEventListener(
-      'touchstart',
-      function (ev) {
-        ev.preventDefault();
-        document.body.style.cursor = 'grabbing';
-        this.getWrapper().style.cursor = 'grabbing';
-        document.addEventListener('touchmove', setPositionEvent, {
-          passive: true
-        });
-      }.bind(this)
-    );
+    var mouseUpTouchEndEvent = function () {
+      this.previousEvent = null;
+      document.body.style.cursor = null;
+      this.getWrapper().style.cursor = 'grab';
+      document.removeEventListener('mousemove', setPositionEvent, {
+        passive: true
+      });
+    }.bind(this);
 
-    document.addEventListener(
-      'touchend',
-      function () {
-        this.previousEvent = null;
-        document.body.style.cursor = null;
-        this.getWrapper().style.cursor = 'grab';
-        document.removeEventListener('touchmove', setPositionEvent, {
-          passive: true
-        });
-      }.bind(this)
-    );
+    document.addEventListener('mouseup', mouseUpTouchEndEvent);
+    document.addEventListener('touchend', mouseUpTouchEndEvent);
+
+    // Mouse wheel events
+    var mouseWheelEvent = function (ev) {
+      ev.preventDefault();
+
+      // Delta
+      var delta = ev.deltaY;
+      if (ev.deltaMode > 0) {
+        delta *= 100;
+      }
+
+      // Speed
+      var speed = this.options.zoomWheelSpeed;
+
+      // Copied from https://github.com/anvaka/panzoom/blob/master/index.js#L884
+      var sign = Math.sign(delta);
+      var deltaAdjustedSpeed = Math.min(0.25, Math.abs((speed * delta) / 128));
+      deltaAdjustedSpeed = 1 - sign * deltaAdjustedSpeed;
+
+      this.zoom = this.sanitizeZoom(this.zoom * deltaAdjustedSpeed);
+      this.setPosition(true);
+    }.bind(this);
+
+    this.getWrapper().addEventListener('wheel', mouseWheelEvent);
   };
 
   // Initialize
