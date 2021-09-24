@@ -23,6 +23,7 @@ function domPanZoomWrapper() {
       initialZoom: 1,
 
       // Bounds
+      // TODO
       bounds: true,
       boundsOffset: 0.1
 
@@ -131,7 +132,7 @@ function domPanZoomWrapper() {
 
     // Check bounds
     if (this.options.bounds) {
-      console.log(this.x, this.y);
+      // console.log(this.x, this.y);
     }
 
     // Set position
@@ -164,7 +165,28 @@ function domPanZoomWrapper() {
 
   // Zoom to
   domPanZoom.prototype.zoomTo = function (zoom, instant) {
-    this.zoom = this.sanitizeZoom(zoom);
+    // Get center
+    var wrapper = this.getWrapper();
+    var container = this.getContainer();
+
+    zoom = this.sanitizeZoom(zoom);
+
+    var diffX = wrapper.clientWidth - container.clientWidth;
+    var diffY = wrapper.clientHeight - container.clientHeight;
+
+    var centerX = diffX * 0.5;
+    var centerY = diffY * 0.5;
+
+    var offsetX = this.x - centerX;
+    var offsetY = this.y - centerY;
+
+    var currentZoom = this.zoom;
+    var zoomGrowth = (zoom - currentZoom) / currentZoom;
+    this.x += offsetX * zoomGrowth;
+    this.y += offsetY * zoomGrowth;
+
+    this.zoom = zoom;
+
     this.setPosition(instant);
   };
 
@@ -189,34 +211,12 @@ function domPanZoomWrapper() {
     // Calculate nextZoom
     var currentZoom = this.zoom;
     var zoomStep = (100 + step) / 100;
-    var nextZoom = currentZoom * (direction === 'out' ? 1 / zoomStep : zoomStep);
-    nextZoom = this.sanitizeZoom(nextZoom);
+    if (direction === 'out') {
+      zoomStep = 1 / zoomStep;
+    }
+    var nextZoom = currentZoom * zoomStep;
 
-    // TODO adjust boundings to zoom centered
-
-    // // Get center
-    // var wrapper = this.getWrapper();
-    // var container = this.getContainer();
-
-    // var diffX = wrapper.clientWidth - container.clientWidth;
-    // var diffY = wrapper.clientHeight - container.clientHeight;
-    // this.x = diffX * 0.5;
-    // this.y = diffY * 0.5;
-
-    //   var currentZoom = this.zoom;
-    //   var nextZoom = zoom;
-    //   var zoomDiff = nextZoom - currentZoom;
-
-    //   var wrapperBounding = this.getWrapper().getBoundingClientRect();
-    //   var panZoomBounding = this.getContainer().getBoundingClientRect();
-
-    //   console.log(panZoomBounding, panZoomBounding);
-
-    //   console.log('zoomDiff', zoomDiff);
-
-    this.zoom = nextZoom;
-
-    this.setPosition(instant);
+    this.zoomTo(nextZoom);
   };
 
   // Center container within wrapper
