@@ -120,16 +120,67 @@ function domPanZoomWrapper() {
       // Speed
       var speed = this.options.zoomWheelSpeed;
 
-      // Copied from https://github.com/anvaka/panzoom/blob/master/index.js#L884
+      // Adjust speed (copied from https://github.com/anvaka/panzoom/blob/master/index.js#L884)
       var sign = Math.sign(delta);
       var deltaAdjustedSpeed = Math.min(0.25, Math.abs((speed * delta) / 128));
       deltaAdjustedSpeed = 1 - sign * deltaAdjustedSpeed;
+      var nextZoom = this.sanitizeZoom(this.zoom * deltaAdjustedSpeed);
 
-      this.zoom = this.sanitizeZoom(this.zoom * deltaAdjustedSpeed);
+      // Get offset from center, then adjust
+      var wrapper = this.getWrapper();
+      //var container = this.getContainer();
+      // var diffX = wrapper.clientWidth - container.clientWidth;
+      // var diffY = wrapper.clientHeight - container.clientHeight;
+
+      var wrapperCenterX = wrapper.clientWidth / 2;
+      var wrapperCenterY = wrapper.clientHeight / 2;
+
+      // console.log(wrapper.clientWidth / 2, wrapper.clientHeight / 2);
+
+      // var centerX = diffX * 0.5;
+      // var centerY = diffY * 0.5;
+
+      var offsetToParent = this.getEventOffsetToParent(ev);
+
+      var offsetX = wrapperCenterX - offsetToParent.x;
+      var offsetY = wrapperCenterY - offsetToParent.y;
+
+
+      console.log(
+        offsetToParent,
+        offsetX,
+        offsetY
+      );
+
+      var currentZoom = this.zoom;
+      var zoomGrowth = (nextZoom - currentZoom) / currentZoom;
+      this.x += offsetX * zoomGrowth;
+      this.y += offsetY * zoomGrowth;
+
+
+      this.zoom = nextZoom;
       this.setPosition(true);
     }.bind(this);
 
     this.getWrapper().addEventListener('wheel', mouseWheelEvent);
+  };
+
+  // https://stackoverflow.com/questions/8389156/what-substitute-should-we-use-for-layerx-layery-since-they-are-deprecated-in-web
+  domPanZoom.prototype.getEventOffsetToParent = function (ev) {
+    var el = ev.target;
+    var x = 0;
+    var y = 0;
+
+    while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+      x += el.offsetLeft - el.scrollLeft;
+      y += el.offsetTop - el.scrollTop;
+      el = el.offsetParent;
+    }
+
+    x = ev.clientX - x;
+    y = ev.clientY - y;
+
+    return { x: x, y: y };
   };
 
   // Initialize
@@ -171,28 +222,22 @@ function domPanZoomWrapper() {
 
   // Zoom to
   domPanZoom.prototype.zoomTo = function (zoom, instant) {
-    // Get center
-    var wrapper = this.getWrapper();
-    var container = this.getContainer();
-
+    // Sanitize zoom
     zoom = this.sanitizeZoom(zoom);
 
+    // Get offset from center, then adjust
+    var wrapper = this.getWrapper();
+    var container = this.getContainer();
     var diffX = wrapper.clientWidth - container.clientWidth;
     var diffY = wrapper.clientHeight - container.clientHeight;
-
     var centerX = diffX * 0.5;
     var centerY = diffY * 0.5;
-
     var offsetX = this.x - centerX;
     var offsetY = this.y - centerY;
+    this.adjustPositionByZoom(zoom, offsetX, offsetY);
 
-    var currentZoom = this.zoom;
-    var zoomGrowth = (zoom - currentZoom) / currentZoom;
-    this.x += offsetX * zoomGrowth;
-    this.y += offsetY * zoomGrowth;
-
+    // Set new zoom
     this.zoom = zoom;
-
     this.setPosition(instant);
   };
 
@@ -208,6 +253,7 @@ function domPanZoomWrapper() {
 
   // Zoom in or out
   domPanZoom.prototype.zoomInOut = function (step, instant, direction) {
+    // Step is an optional attribute
     if (step === true || step === false) {
       instant = step;
       step = null;
@@ -222,7 +268,16 @@ function domPanZoomWrapper() {
     }
     var nextZoom = currentZoom * zoomStep;
 
+    // Set zoom
     this.zoomTo(nextZoom);
+  };
+
+  // Adjust position when zooming
+  domPanZoom.prototype.adjustPositionByZoom = function (zoom, x, y) {
+    var currentZoom = this.zoom;
+    var zoomGrowth = (zoom - currentZoom) / currentZoom;
+    this.x += x * zoomGrowth;
+    this.y += y * zoomGrowth;
   };
 
   // Center container within wrapper
