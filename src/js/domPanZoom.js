@@ -12,23 +12,35 @@ function domPanZoomWrapper() {
       // Start with a centered position
       center: true,
 
-      // Minimum and maximum zoom
-      minZoom: 0.1,
-      maxZoom: 10,
+      // The wrapper element will always contain the panZoom element
+      // This works similar to CSS background-size: contain
+      // TODO LINK
+      // TODO
+      contain: true,
 
-      // How many percent to zoom with methods zoomIn and zoomOut
-      zoomStep: 50,
-
-      // The speed in wich zo zoom when using mouse wheel
-      zoomWheelSpeed: 1,
-
-      // Initial zoom
-      initialZoom: 1,
+      // How far you can zoom in even if contain is set in percent
+      // TODO
+      containOffset: 10,
 
       // Bounds
       // TODO
       bounds: true,
-      boundsOffset: 0.1
+
+      // TODO
+      boundsOffset: 10,
+
+      // Minimum and maximum zoom
+      minZoom: 0.1,
+      maxZoom: 10,
+
+      // How many percent to zoom with the methods zoomIn and zoomOut
+      zoomStep: 50,
+
+      // The speed in which to zoom when using mouse wheel
+      zoomWheelSpeed: 1,
+
+      // Initial zoom
+      initialZoom: 1
 
       // TODO Initial panX
       // TODO Initial panY
@@ -144,18 +156,12 @@ function domPanZoomWrapper() {
       var offsetX = wrapperCenterX - offsetToParent.x;
       var offsetY = wrapperCenterY - offsetToParent.y;
 
-
-      console.log(
-        offsetToParent,
-        offsetX,
-        offsetY
-      );
+      console.log(offsetToParent, offsetX, offsetY);
 
       var currentZoom = this.zoom;
       var zoomGrowth = (nextZoom - currentZoom) / currentZoom;
       this.x += offsetX * zoomGrowth;
       this.y += offsetY * zoomGrowth;
-
 
       this.zoom = nextZoom;
       this.setPosition(true);
