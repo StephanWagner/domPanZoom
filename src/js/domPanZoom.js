@@ -10,6 +10,7 @@ function domPanZoomWrapper() {
       panZoomElementID: '',
 
       // Start with a centered position
+      // This options overrides options initalPanX and initialPanY
       center: true,
 
       // Set this option to 'contain' or 'cover' to limit the boundries of the panZoomElement to the wrapperElement
@@ -28,10 +29,11 @@ function domPanZoomWrapper() {
       zoomWheelSpeed: 1,
 
       // Initial zoom
-      initialZoom: 1
+      initialZoom: 1,
 
-      // TODO Initial panX
-      // TODO Initial panY
+      // Initial pan
+      initialPanX: 0,
+      initialPanY: 0
     };
 
     // Merge options
@@ -80,10 +82,14 @@ function domPanZoomWrapper() {
     }
 
     // Set initial zoom
-    this.zoomTo(this.options.initialZoom, true);
+    this.zoom = this.sanitizeZoom(this.options.initialZoom);
 
-    // Set center position
-    this.options.center && this.center(true);
+    // Set initial pan
+    this.x = this.options.initialPanX;
+    this.y = this.options.initialPanY;
+
+    // Set position
+    this.options.center ? this.center(true) : this.setPosition(true);
   };
 
   // Attach events
@@ -103,15 +109,8 @@ function domPanZoomWrapper() {
         movementY = event.pageY - this.previousEvent.pageY;
       }
 
-      var nextX = (this.x += movementX);
-      var nextY = (this.y += movementY);
-
-      if (this.options.bounds) {
-        console.log('nextX', nextX, 'nextY', nextY);
-      }
-
-      this.x = nextX;
-      this.y = nextY;
+      this.x += movementX;
+      this.y += movementY;
       this.setPosition(true);
 
       this.previousEvent = event;
@@ -219,7 +218,7 @@ function domPanZoomWrapper() {
 
     // Check bounds
     if (this.options.bounds) {
-      // console.log(this.x, this.y);
+      console.log(this.x, this.y);
     }
 
     // Set position
