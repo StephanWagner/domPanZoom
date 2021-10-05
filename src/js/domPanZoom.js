@@ -137,31 +137,26 @@ function domPanZoomWrapper() {
       deltaAdjustedSpeed = 1 - sign * deltaAdjustedSpeed;
       var nextZoom = this.sanitizeZoom(this.zoom * deltaAdjustedSpeed);
 
-      // Get offset from center, then adjust
-      var wrapper = this.getWrapper();
-      //var container = this.getContainer();
+      // var wrapper = this.getWrapper();
+      // var container = this.getContainer();
       // var diffX = wrapper.clientWidth - container.clientWidth;
       // var diffY = wrapper.clientHeight - container.clientHeight;
-
-      var wrapperCenterX = wrapper.clientWidth / 2;
-      var wrapperCenterY = wrapper.clientHeight / 2;
-
-      // console.log(wrapper.clientWidth / 2, wrapper.clientHeight / 2);
-
       // var centerX = diffX * 0.5;
       // var centerY = diffY * 0.5;
+      // var offsetX = this.x - centerX;
+      // var offsetY = this.y - centerY;
 
-      var offsetToParent = this.getEventOffsetToParent(ev);
+      // var offsetToParent = this.getEventOffsetToParent(ev);
 
-      var offsetX = wrapperCenterX - offsetToParent.x;
-      var offsetY = wrapperCenterY - offsetToParent.y;
+      // // var offsetX = wrapperCenterX; // - offsetToParent.x;
+      // // var offsetY = wrapperCenterY; // - offsetToParent.y;
 
-      console.log(offsetToParent, offsetX, offsetY);
+      // console.log('offsetToParent', offsetToParent, offsetX, offsetY);
 
-      var currentZoom = this.zoom;
-      var zoomGrowth = (nextZoom - currentZoom) / currentZoom;
-      this.x += offsetX * zoomGrowth;
-      this.y += offsetY * zoomGrowth;
+      // var currentZoom = this.zoom;
+      // var zoomGrowth = (nextZoom - currentZoom) / currentZoom;
+      // this.x += offsetX * zoomGrowth;
+      // this.y += offsetY * zoomGrowth;
 
       this.zoom = nextZoom;
       this.setPosition(true);
@@ -281,6 +276,17 @@ function domPanZoomWrapper() {
   domPanZoom.prototype.adjustPositionByZoom = function (zoom, x, y) {
     var currentZoom = this.zoom;
     var zoomGrowth = (zoom - currentZoom) / currentZoom;
+
+    var container = this.getContainer();
+    var maxOffsetX = container.clientWidth * 0.5 * currentZoom;
+    var maxOffsetY = container.clientHeight * 0.5 * currentZoom;
+
+    (x > maxOffsetX) && (x = Math.min(x, maxOffsetX));
+    (x < maxOffsetX * -1) && (x = Math.max(x, maxOffsetX * -1));
+
+    (y > maxOffsetY) && (y = Math.min(y, maxOffsetY));
+    (y < maxOffsetY * -1) && (y = Math.max(y, maxOffsetY * -1));
+
     this.x += x * zoomGrowth;
     this.y += y * zoomGrowth;
   };
