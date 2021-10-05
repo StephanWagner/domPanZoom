@@ -13,22 +13,9 @@ function domPanZoomWrapper() {
       // Start with a centered position
       center: true,
 
-      // The wrapper element will always contain the panZoom element
-      // This works similar to CSS background-size: contain
-      // TODO LINK
-      // TODO
-      contain: true,
-
-      // How far you can zoom in even if contain is set in percent
-      // TODO
-      containOffset: 10,
-
-      // Bounds
-      // TODO
-      bounds: true,
-
-      // TODO
-      boundsOffset: 10,
+      // Limit the panZoomElement to the wrapperElement, use 'contain' or 'cover'
+      // This works similar to CSS background-size: contain / cover
+      bounds: 'contain',
 
       // Minimum and maximum zoom
       minZoom: 0.1,
@@ -56,12 +43,34 @@ function domPanZoomWrapper() {
 
   // Initialize
   domPanZoom.prototype.init = function () {
+    // Init containers
+    var wrapper = this.getWrapper();
+    var container = this.getContainer();
+
     // Add styles
-    this.getWrapper().style.cursor = 'grab';
-    this.getWrapper().style.overflow = 'hidden';
+    wrapper.style.cursor = 'grab';
+    wrapper.style.overflow = 'hidden';
 
     // Attach events
     this.attachEvents();
+
+    // Adjust minZoom for option bounds
+    if (this.options.bounds) {
+      var maxWidth = wrapper.clientWidth;
+      var maxHeight = wrapper.clientHeight;
+
+      var panZoomWidth = container.clientWidth;
+      var panZoomHeight = container.clientHeight;
+
+      var minZoomX = maxWidth / panZoomWidth;
+      var minZoomY = maxHeight / panZoomHeight;
+
+      if (this.options.bounds === 'cover') {
+        this.options.minZoom = Math.max(minZoomX, minZoomY);
+      } else {
+        this.options.minZoom = Math.min(minZoomX, minZoomY);
+      }
+    }
 
     // Set initial zoom
     this.zoomTo(this.options.initialZoom, true);
@@ -87,8 +96,15 @@ function domPanZoomWrapper() {
         movementY = event.pageY - this.previousEvent.pageY;
       }
 
-      this.x += movementX;
-      this.y += movementY;
+      var nextX = (this.x += movementX);
+      var nextY = (this.y += movementY);
+
+      if (this.options.bounds) {
+        console.log('nextX', nextX, 'nextY', nextY);
+      }
+
+      this.x = nextX;
+      this.y = nextY;
       this.setPosition(true);
 
       this.previousEvent = event;
