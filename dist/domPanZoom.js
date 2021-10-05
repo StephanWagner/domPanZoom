@@ -102,6 +102,9 @@ function domPanZoomWrapper() {
       document.addEventListener('mousemove', setPositionEvent, {
         passive: true
       });
+      document.addEventListener('touchmove', setPositionEvent, {
+        passive: true
+      });
     }.bind(this);
 
     this.getWrapper().addEventListener('mousedown', mouseDownTouchStartEvent);
@@ -112,6 +115,9 @@ function domPanZoomWrapper() {
       document.body.style.cursor = null;
       this.getWrapper().style.cursor = 'grab';
       document.removeEventListener('mousemove', setPositionEvent, {
+        passive: true
+      });
+      document.removeEventListener('touchmove', setPositionEvent, {
         passive: true
       });
     }.bind(this);
@@ -282,11 +288,11 @@ function domPanZoomWrapper() {
     var maxOffsetX = container.clientWidth * 0.5 * currentZoom;
     var maxOffsetY = container.clientHeight * 0.5 * currentZoom;
 
-    (x > maxOffsetX) && (x = Math.min(x, maxOffsetX));
-    (x < maxOffsetX * -1) && (x = Math.max(x, maxOffsetX * -1));
+    x > maxOffsetX && (x = Math.min(x, maxOffsetX));
+    x < maxOffsetX * -1 && (x = Math.max(x, maxOffsetX * -1));
 
-    (y > maxOffsetY) && (y = Math.min(y, maxOffsetY));
-    (y < maxOffsetY * -1) && (y = Math.max(y, maxOffsetY * -1));
+    y > maxOffsetY && (y = Math.min(y, maxOffsetY));
+    y < maxOffsetY * -1 && (y = Math.max(y, maxOffsetY * -1));
 
     this.x += x * zoomGrowth;
     this.y += y * zoomGrowth;
