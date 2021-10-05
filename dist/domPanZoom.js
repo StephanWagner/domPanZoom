@@ -13,8 +13,9 @@ function domPanZoomWrapper() {
       // Start with a centered position
       center: true,
 
-      // Limit the panZoomElement to the wrapperElement, use 'contain' or 'cover'
-      // This works similar to CSS background-size: contain / cover
+      // Set this option to 'contain' or 'cover' to limit the boundries of the panZoomElement to the wrapperElement
+      // This works similar to the CSS property background-size: contain / cover
+      // Setting this option might effect the option minZoom
       bounds: 'contain',
 
       // Minimum and maximum zoom
@@ -66,9 +67,16 @@ function domPanZoomWrapper() {
       var minZoomY = maxHeight / panZoomHeight;
 
       if (this.options.bounds === 'cover') {
-        this.options.minZoom = Math.max(minZoomX, minZoomY);
+        this.options.minZoom = Math.max(
+          this.options.minZoom,
+          minZoomX,
+          minZoomY
+        );
       } else {
-        this.options.minZoom = Math.min(minZoomX, minZoomY);
+        this.options.minZoom = Math.max(
+          this.options.minZoom,
+          Math.min(minZoomX, minZoomY)
+        );
       }
     }
 
