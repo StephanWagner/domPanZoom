@@ -216,9 +216,28 @@ function domPanZoomWrapper() {
   domPanZoom.prototype.setPosition = function (instant) {
     this.transition(!instant);
 
-    // Check bounds
+    // Fit to bounds
     if (this.options.bounds) {
-      console.log(this.x, this.y);
+      var wrapper = this.getWrapper();
+      var container = this.getContainer();
+      var wrapperWidth = wrapper.clientWidth;
+      var wrapperHeight = wrapper.clientHeight;
+      var containerWidth = container.clientWidth;
+      var containerHeight = container.clientHeight;
+
+      if (this.options.bounds === 'cover') {
+        var upperOffsetX = (containerWidth / 2) * (this.zoom - 1);
+        this.x = Math.min(this.x, upperOffsetX);
+
+        var lowerOffsetX = upperOffsetX * -1 + wrapperWidth - containerWidth;
+        this.x = Math.max(this.x, lowerOffsetX);
+
+        var upperOffsetY = (containerHeight / 2) * (this.zoom - 1);
+        this.y = Math.min(this.y, upperOffsetY);
+
+        var lowerOffsetY = upperOffsetY * -1 + wrapperHeight - containerHeight;
+        this.y = Math.max(this.y, lowerOffsetY);
+      }
     }
 
     // Set position
