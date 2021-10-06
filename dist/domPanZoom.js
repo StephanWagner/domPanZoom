@@ -131,10 +131,10 @@ function domPanZoomWrapper() {
     }.bind(this);
 
     this.getWrapper().addEventListener('mousedown', mouseDownTouchStartEvent, {
-      passive: true
+      passive: false
     });
     this.getWrapper().addEventListener('touchstart', mouseDownTouchStartEvent, {
-      passive: true
+      passive: false
     });
 
     var mouseUpTouchEndEvent = function () {
