@@ -17,7 +17,7 @@ function domPanZoomWrapper() {
       // Set this option to 'contain' or 'cover' to limit the boundries of the panZoomElement to the wrapperElement
       // This works similar to the CSS property background-size: contain / cover
       // Setting this option might effect the option minZoom
-      bounds: 'contain',
+      bounds: 'cover',
 
       // Minimum and maximum zoom
       minZoom: 0.1,
@@ -225,18 +225,28 @@ function domPanZoomWrapper() {
       var wrapperHeight = wrapper.clientHeight;
       var containerWidth = container.clientWidth;
       var containerHeight = container.clientHeight;
+      var containerZoomWidth = containerWidth * this.zoom;
+      var containerZoomHeight = containerHeight * this.zoom;
 
-      if (this.options.bounds === 'cover') {
-        var upperOffsetX = (containerWidth / 2) * (this.zoom - 1);
+      var upperOffsetX = (containerWidth / 2) * (this.zoom - 1);
+      var lowerOffsetX = upperOffsetX * -1 + wrapperWidth - containerWidth;
+
+      if (containerZoomWidth < wrapperWidth) {
+        this.x < upperOffsetX && (this.x = upperOffsetX);
+        this.x > lowerOffsetX && (this.x = lowerOffsetX);
+      } else {
         this.x = Math.min(this.x, upperOffsetX);
-
-        var lowerOffsetX = upperOffsetX * -1 + wrapperWidth - containerWidth;
         this.x = Math.max(this.x, lowerOffsetX);
+      }
 
-        var upperOffsetY = (containerHeight / 2) * (this.zoom - 1);
+      var upperOffsetY = (containerHeight / 2) * (this.zoom - 1);
+      var lowerOffsetY = upperOffsetY * -1 + wrapperHeight - containerHeight;
+
+      if (containerZoomHeight < wrapperHeight) {
+        this.y < upperOffsetY && (this.y = upperOffsetY);
+        this.y > lowerOffsetY && (this.y = lowerOffsetY);
+      } else {
         this.y = Math.min(this.y, upperOffsetY);
-
-        var lowerOffsetY = upperOffsetY * -1 + wrapperHeight - containerHeight;
         this.y = Math.max(this.y, lowerOffsetY);
       }
     }
