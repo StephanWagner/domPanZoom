@@ -130,8 +130,12 @@ function domPanZoomWrapper() {
       });
     }.bind(this);
 
-    this.getWrapper().addEventListener('mousedown', mouseDownTouchStartEvent);
-    this.getWrapper().addEventListener('touchstart', mouseDownTouchStartEvent);
+    this.getWrapper().addEventListener('mousedown', mouseDownTouchStartEvent, {
+      passive: true
+    });
+    this.getWrapper().addEventListener('touchstart', mouseDownTouchStartEvent, {
+      passive: true
+    });
 
     var mouseUpTouchEndEvent = function () {
       this.previousEvent = null;
@@ -145,8 +149,12 @@ function domPanZoomWrapper() {
       });
     }.bind(this);
 
-    document.addEventListener('mouseup', mouseUpTouchEndEvent);
-    document.addEventListener('touchend', mouseUpTouchEndEvent);
+    document.addEventListener('mouseup', mouseUpTouchEndEvent, {
+      passive: true
+    });
+    document.addEventListener('touchend', mouseUpTouchEndEvent, {
+      passive: true
+    });
 
     // Mouse wheel events
     var mouseWheelEvent = function (ev) {
@@ -192,7 +200,9 @@ function domPanZoomWrapper() {
       this.setPosition(true);
     }.bind(this);
 
-    this.getWrapper().addEventListener('wheel', mouseWheelEvent);
+    this.getWrapper().addEventListener('wheel', mouseWheelEvent, {
+      passive: false
+    });
   };
 
   // https://stackoverflow.com/questions/8389156/what-substitute-should-we-use-for-layerx-layery-since-they-are-deprecated-in-web

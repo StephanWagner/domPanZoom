@@ -200,7 +200,7 @@ function domPanZoomWrapper() {
     }.bind(this);
 
     this.getWrapper().addEventListener('wheel', mouseWheelEvent, {
-      passive: true
+      passive: false
     });
   };
 
