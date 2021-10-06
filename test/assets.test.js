@@ -12,7 +12,7 @@ function checkForAsset(path) {
 }
 
 // Check for default files
-for (let extension of ['.js', '.min.js', '.css', '.min.css']) {
+for (let extension of ['.js', '.min.js']) {
   test('Asset domPanZoom' + extension + ' exists', () => {
     expect(checkForAsset('./dist/domPanZoom' + extension)).toBe(true);
   });
