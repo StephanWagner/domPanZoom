@@ -26,15 +26,27 @@ import domPanZoom from 'dompanzoom';
 
 ## Usage
 
+You need two HTML DOM elements, the panZoom element within a wrapper element:
+
+```html
+<div id="my-wrapper">
+  <div id="my-container"></div>
+</div>
+```
+
+Then create a new instance of domPanZoom:
+
 ```javascript
 new domPanZoom({
   // The ID of the wrapper element (required)
-  wrapperElementID: 'prototype__wrapper',
+  wrapperElementID: 'my-wrapper',
 
   // The ID of the container element (required)
-  panZoomElementID: 'prototype__container'
+  panZoomElementID: 'my-container'
 });
 ```
+
+---
 
 ## Options
 
@@ -51,6 +63,17 @@ You can pass the following options into domPanZoom:
 | `initialPanX` | `0` | Initial horizontal pan |
 | `initialZoom` | `0` | Initial vertical pan |
 
+### E.g.
+
+```javascript
+new domPanZoom({
+  wrapperElementID: 'my-wrapper',
+  panZoomElementID: 'my-container',
+  bounds: false,
+  minZoom: 1
+});
+```
+
 ---
 
 ## Methods
@@ -59,9 +82,48 @@ You can use the following methods:
 
 | Method |  |
 | --- | --- |
+| `.getPan()` | Returns an object with x and y values of current pan position |
+| `.getPanX()` | Returns current pan x position |
+| `.getPanY()` | Returns current pan y position |
+| `.getZoom()` | Returns current zoom level |
 | `.zoomTo(2)`<br>`.zoomTo(2, true)` | Zoom to a specific zoom level. Pass true as a second argument to zoom instantly |
 | `.zoomIn()`<br>`.zoomIn(20)`<br>`.zoomIn(true)`<br>`.zoomIn(50, true)`<br>`.zoomOut()` | Zoom in and out. You can pass a number to zoom a specific amount (in percent). Pass true as first or second argument to zoom instantly |
 | `.center()`<br>`.center(true)` | Move to centered position. Pass true to center instantly |
+
+### E.g.
+
+```javascript
+new domPanZoom({
+  wrapperElementID: 'my-wrapper',
+  panZoomElementID: 'my-container'
+});
+
+var currentPan = myDomPanZoom.getPan();
+```
+
+---
+
+## Events
+
+| Event |  |
+| --- | --- |
+| `onInit` | Triggered once domPanZoom is initialized |
+| `onChange` | Triggered while panning or zooming |
+| `onZoom` | Triggered while zooming |
+| `onPan` | Triggered while panning |
+
+### E.g.
+
+```javascript
+var myDomPanZoom = new domPanZoom({
+  wrapperElementID: 'my-wrapper',
+  panZoomElementID: 'my-container',
+
+  onZoom: function (e) {
+    console.log(this.getZoom());
+  }
+});
+```
 
 ---
 
