@@ -34,7 +34,13 @@ function domPanZoomWrapper() {
 
       // Initial pan
       initialPanX: 0,
-      initialPanY: 0
+      initialPanY: 0,
+
+      // Events
+      onInit: null,
+      onChange: null,
+      onZoom: null,
+      onPan: null
     };
 
     // Merge options
@@ -91,6 +97,14 @@ function domPanZoomWrapper() {
 
     // Set position
     this.options.center ? this.center(true) : this.setPosition(true);
+
+    // Trigger event
+    this.fireEvent('onInit', this.getPosition());
+  };
+
+  // Fire an event from the options
+  domPanZoom.prototype.fireEvent = function (event, pass) {
+    this.options[event] && this.options[event].bind(this)(pass);
   };
 
   // Attach events
@@ -115,6 +129,9 @@ function domPanZoomWrapper() {
       this.setPosition(true);
 
       this.previousEvent = event;
+
+      // Trigger event
+      this.fireEvent('onPan', this.getPosition());
     }.bind(this);
 
     // Mouse down or touchstart event
@@ -223,6 +240,15 @@ function domPanZoomWrapper() {
     return { x: x, y: y };
   };
 
+  // Get current position values
+  domPanZoom.prototype.getPosition = function () {
+    return {
+      zoom: this.zoom,
+      x: this.x,
+      y: this.y
+    };
+  };
+
   // Initialize
   domPanZoom.prototype.setPosition = function (instant) {
     this.transition(!instant);
@@ -272,6 +298,9 @@ function domPanZoomWrapper() {
       ', ' +
       this.y +
       ')';
+
+    // Trigger event
+    this.fireEvent('onChange', this.getPosition());
   };
 
   // Sanitize zoom value
@@ -287,6 +316,11 @@ function domPanZoomWrapper() {
     }
 
     return zoom;
+  };
+
+  // Getter for zoom
+  domPanZoom.prototype.getZoom = function () {
+    return this.zoom;
   };
 
   // Zoom to
@@ -308,6 +342,9 @@ function domPanZoomWrapper() {
     // Set new zoom
     this.zoom = zoom;
     this.setPosition(instant);
+
+    // Trigger event
+    this.fireEvent('onZoom', this.getPosition());
   };
 
   // Zoom in
@@ -339,6 +376,9 @@ function domPanZoomWrapper() {
 
     // Set zoom
     this.zoomTo(nextZoom);
+
+    // Trigger event
+    this.fireEvent('onZoom', this.getPosition());
   };
 
   // Adjust position when zooming
@@ -371,6 +411,22 @@ function domPanZoomWrapper() {
     this.y = diffY * 0.5;
 
     this.setPosition(instant);
+  };
+
+  // Getters for pan
+  domPanZoom.prototype.getPan = function () {
+    return {
+      x: this.x,
+      y: this.y
+    };
+  };
+
+  domPanZoom.prototype.getPanX = function () {
+    return this.x;
+  };
+
+  domPanZoom.prototype.getPanY = function () {
+    return this.x;
   };
 
   // Get the wrapper element

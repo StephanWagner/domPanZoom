@@ -76,10 +76,32 @@
           }
         </style>
 
+        <div>Zoom: <span id="protype__zoom"></span></div>
+        <div>Pan X: <span id="protype__pan-x"></span></div>
+        <div>Pan Y: <span id="protype__pan-y"></span></div>
+
         <script>
           var myPanZoom = new domPanZoom({
             wrapperElementID: 'prototype__wrapper',
-            panZoomElementID: 'prototype__container'
+            panZoomElementID: 'prototype__container',
+
+            onInit: function () {
+              document.getElementById('protype__pan-x').innerHTML =
+                this.getPanX();
+              document.getElementById('protype__pan-y').innerHTML =
+                this.getPanY();
+            },
+
+            onChange: function () {
+              document.getElementById('protype__zoom').innerHTML =
+                this.getZoom();
+
+              document.getElementById('protype__pan-x').innerHTML =
+                this.getPanX();
+
+              document.getElementById('protype__pan-y').innerHTML =
+                this.getPanY();
+            },
           });
         </script>
       </div>
