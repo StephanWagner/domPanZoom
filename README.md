@@ -1,6 +1,6 @@
 # domPanZoom
 
-Add mobile friendly panning and zooming to any DOM element.
+Add mobile friendly panning and zooming to any HTML DOM element.
 
 ---
 
@@ -26,7 +26,7 @@ import domPanZoom from 'dompanzoom';
 
 ## Usage
 
-You need two HTML DOM elements, the panZoom element within a wrapper element:
+You need two HTML DOM elements. The panZoom element within a wrapper element:
 
 ```html
 <div id="my-wrapper">
@@ -60,6 +60,7 @@ You can pass the following options into domPanZoom:
 | `maxZoom` | `10` | Maximum zoom |
 | `zoomStep` | `50` | How many percent to zoom with the methods zoomIn and zoomOut |
 | `zoomWheelSpeed` | `1` | The speed in which to zoom when using mouse wheel |
+| `panStep` | `10` | How many percent to pan with the methods panLeft, panRight, panUp and panDown |
 | `initialPanX` | `0` | Initial horizontal pan |
 | `initialZoom` | `0` | Initial vertical pan |
 
@@ -80,15 +81,19 @@ new domPanZoom({
 
 You can use the following methods:
 
-| Method |  |
+| Getter methods |  |
 | --- | --- |
 | `.getPan()` | Returns an object with x and y values of current pan position |
 | `.getPanX()` | Returns current pan x position |
 | `.getPanY()` | Returns current pan y position |
 | `.getZoom()` | Returns current zoom level |
-| `.zoomTo(2)`<br>`.zoomTo(2, true)` | Zoom to a specific zoom level. Pass true as a second argument to zoom instantly |
-| `.zoomIn()`<br>`.zoomIn(20)`<br>`.zoomIn(true)`<br>`.zoomIn(50, true)`<br>`.zoomOut()` | Zoom in and out. You can pass a number to zoom a specific amount (in percent). Pass true as first or second argument to zoom instantly |
-| `.center()`<br>`.center(true)` | Move to centered position. Pass true to center instantly |
+
+| Setter methods |  |
+| --- | --- |
+| `.panLeft()`<br>`.panRight()`<br>`.panUp()`<br>`.panDown()` | Pan a aspecific direction. You can pass a number to pan a specific amount (in percent). Pass `true` as first or second argument to pan instantly, e.g. `.panLeft(50)`, `.panRight(true)`, `.panUp(30, true)` |
+| `.zoomTo(2)` | Zoom to a specific zoom level. Pass true as a second argument to zoom instantly, e.g. `.zoomTo(3, true)` |
+| `.zoomIn()`<br>`.zoomOut()` | Zoom in and out. You can pass a number to zoom a specific amount (in percent). Pass `true` as first or second argument to zoom instantly, `.zoomIn(20)`, `.zoomIn(true)`, `.zoomIn(50, true)`<br> |
+| `.center()` | Move to centered position. Pass true to center instantly, e.g. `.center(true)` |
 
 ### E.g.
 

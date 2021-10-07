@@ -34,7 +34,22 @@
           <button onclick="myPanZoom.zoomIn(100)">Zoom in by 100%</button>
           <button onclick="myPanZoom.zoomOut()">Zoom out</button>
           <br />
+          <br />
+
           <button onclick="myPanZoom.center()">Set center</button>
+          <br />
+
+          <button onclick="myPanZoom.panLeft()">panLeft</button>
+          <button onclick="myPanZoom.panRight()">panRight</button>
+          <button onclick="myPanZoom.panUp()">panUp</button>
+          <button onclick="myPanZoom.panUp(true)">panUp (instant)</button>
+          <button onclick="myPanZoom.panDown()">panDown</button>
+          <button onclick="myPanZoom.panRight(200)">Pan Right 200%</button>
+          <br />
+          <button onclick="myPanZoom.panTo(30, 80)">panTo 30 80</button>
+          <button onclick="myPanZoom.panTo(100, 100, true)">
+            panTo 100 100 (instant)
+          </button>
         </div>
 
         <style>
@@ -85,6 +100,8 @@
             wrapperElementID: 'prototype__wrapper',
             panZoomElementID: 'prototype__container',
 
+            bounds: false,
+
             onChange: function () {
               document.getElementById('protype__zoom').innerHTML =
                 this.getZoom();
@@ -94,7 +111,7 @@
 
               document.getElementById('protype__pan-y').innerHTML =
                 this.getPanY();
-            },
+            }
           });
         </script>
       </div>

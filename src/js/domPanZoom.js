@@ -31,6 +31,9 @@ function domPanZoomWrapper() {
       // Initial zoom
       initialZoom: 1,
 
+      // How many percent to move with the panning methods
+      panStep: 10,
+
       // Initial pan
       initialPanX: 0,
       initialPanY: 0,
@@ -374,7 +377,7 @@ function domPanZoomWrapper() {
     var nextZoom = currentZoom * zoomStep;
 
     // Set zoom
-    this.zoomTo(nextZoom);
+    this.zoomTo(nextZoom, instant);
 
     // Trigger event
     this.fireEvent('onZoom', this.getPosition());
@@ -426,6 +429,60 @@ function domPanZoomWrapper() {
 
   domPanZoom.prototype.getPanY = function () {
     return this.y;
+  };
+
+  // Pan to position
+  domPanZoom.prototype.panTo = function (x, y, instant) {
+    var wrapper = this.getWrapper();
+    var container = this.getContainer();
+
+    var wrapperWidth = wrapper.clientWidth;
+    var wrapperHeight = wrapper.clientHeight;
+
+    var containerWidth = container.clientWidth;
+    var containerHeight = container.clientHeight;
+
+    // TODO
+
+
+    this.x = x * this.zoom;
+    this.y = y * this.zoom;
+    this.setPosition(instant);
+  };
+
+  domPanZoom.prototype.panLeft = function (step, instant) {
+    this.pan(step, instant, 'left');
+  };
+
+  domPanZoom.prototype.panRight = function (step, instant) {
+    this.pan(step, instant, 'right');
+  };
+
+  domPanZoom.prototype.panUp = function (step, instant) {
+    this.pan(step, instant, 'up');
+  };
+
+  domPanZoom.prototype.panDown = function (step, instant) {
+    this.pan(step, instant, 'down');
+  };
+
+  domPanZoom.prototype.pan = function (step, instant, direction) {
+    if (step === true || step === false) {
+      instant = step;
+      step = null;
+    }
+    step = step || this.options.panStep;
+
+    var container = this.getContainer();
+    panWidth = container.clientWidth * step / 100 * this.zoom;
+    panHeight = container.clientWidth * step / 100 * this.zoom;
+
+    direction === 'left' && (this.x += panWidth * -1);
+    direction === 'right' && (this.x += panWidth);
+    direction === 'up' && (this.y += panHeight * -1);
+    direction === 'down' && (this.y += panHeight);
+
+    this.setPosition(instant);
   };
 
   // Get the wrapper element
