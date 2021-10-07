@@ -85,13 +85,6 @@
             wrapperElementID: 'prototype__wrapper',
             panZoomElementID: 'prototype__container',
 
-            onInit: function () {
-              document.getElementById('protype__pan-x').innerHTML =
-                this.getPanX();
-              document.getElementById('protype__pan-y').innerHTML =
-                this.getPanY();
-            },
-
             onChange: function () {
               document.getElementById('protype__zoom').innerHTML =
                 this.getZoom();
