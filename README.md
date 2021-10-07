@@ -81,19 +81,19 @@ new domPanZoom({
 
 You can use the following methods:
 
-| Getter methods |  |
+| Getters |  |
 | --- | --- |
 | `.getPan()` | Returns an object with x and y values of current pan position |
 | `.getPanX()` | Returns current pan x position |
 | `.getPanY()` | Returns current pan y position |
 | `.getZoom()` | Returns current zoom level |
 
-| Setter methods |  |
+| Setters |  |
 | --- | --- |
 | `.panLeft()`<br>`.panRight()`<br>`.panUp()`<br>`.panDown()` | Pan a aspecific direction. You can pass a number to pan a specific amount (in percent). Pass `true` as first or second argument to pan instantly, e.g. `.panLeft(50)`, `.panRight(true)`, `.panUp(30, true)` |
+| `.center()` | Move to centered position. Pass true to center instantly, e.g. `.center(true)` |
 | `.zoomTo(2)` | Zoom to a specific zoom level. Pass true as a second argument to zoom instantly, e.g. `.zoomTo(3, true)` |
 | `.zoomIn()`<br>`.zoomOut()` | Zoom in and out. You can pass a number to zoom a specific amount (in percent). Pass `true` as first or second argument to zoom instantly, `.zoomIn(20)`, `.zoomIn(true)`, `.zoomIn(50, true)`<br> |
-| `.center()` | Move to centered position. Pass true to center instantly, e.g. `.center(true)` |
 
 ### E.g.
 
