@@ -426,7 +426,7 @@ function domPanZoomWrapper() {
   };
 
   domPanZoom.prototype.getPanY = function () {
-    return this.x;
+    return this.y;
   };
 
   // Get the wrapper element
