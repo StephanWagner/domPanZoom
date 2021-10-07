@@ -1,6 +1,6 @@
 {
   "name": "dompanzoom",
-  "description": "",
+  "description": "Add mobile friendly panning and zooming to any DOM element.",
   "version": "0.0.4",
   "private": false,
   "author": "Stephan Wagner <stephanwagner.me@gmail.com> (https://stephanwagner.me)",
