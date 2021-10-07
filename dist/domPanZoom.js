@@ -436,16 +436,17 @@ function domPanZoomWrapper() {
   domPanZoom.prototype.panTo = function (x, y, instant) {
     var wrapper = this.getWrapper();
     var container = this.getContainer();
-
     var wrapperWidth = wrapper.clientWidth;
     var wrapperHeight = wrapper.clientHeight;
-
     var containerWidth = container.clientWidth;
     var containerHeight = container.clientHeight;
 
+    var panX = ((containerWidth * x) / 100) * this.zoom;
+    var panY = ((containerHeight * y) / 100) * this.zoom;
 
-    // TODO
+    console.log(panX, panY);
 
+    // TODO shgould be centered
 
     this.x = x * this.zoom;
     this.y = y * this.zoom;
@@ -476,8 +477,8 @@ function domPanZoomWrapper() {
     step = step || this.options.panStep;
 
     var container = this.getContainer();
-    panWidth = container.clientWidth * step / 100 * this.zoom;
-    panHeight = container.clientWidth * step / 100 * this.zoom;
+    panWidth = ((container.clientWidth * step) / 100) * this.zoom;
+    panHeight = ((container.clientWidth * step) / 100) * this.zoom;
 
     direction === 'left' && (this.x += panWidth * -1);
     direction === 'right' && (this.x += panWidth);
