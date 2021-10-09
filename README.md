@@ -63,6 +63,7 @@ You can pass the following options into domPanZoom:
 | `panStep` | `10` | How many percent to pan with the methods panLeft, panRight, panUp and panDown |
 | `initialPanX` | `0` | Initial horizontal pan |
 | `initialZoom` | `0` | Initial vertical pan |
+| `transitionSpeed` | `400` | Transition speed in milliseconds, higher values are slower |
 
 ### E.g.
 

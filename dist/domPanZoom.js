@@ -39,8 +39,8 @@ function domPanZoomWrapper() {
       initialPanX: 0,
       initialPanY: 0,
 
-      // Transition speed
-      transitionSpeed: '400ms',
+      // Transition speed in milliseconds, higher values are slower
+      transitionSpeed: 400,
 
       // Events
       onInit: null,
@@ -547,7 +547,7 @@ function domPanZoomWrapper() {
 
   // Enable or disable transitions
   domPanZoom.prototype.transition = function (enabled) {
-    this.getContainer().style.transition = enabled ? 'transform ' + this.options.transitionSpeed : null;
+    this.getContainer().style.transition = enabled ? 'transform ' + this.options.transitionSpeed + 'ms' : null;
   };
 
   return domPanZoom;
