@@ -19,7 +19,7 @@ import domPanZoom from 'dompanzoom';
 ### CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/dompanzoom@v0.0.4/dist/domPanZoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompanzoom@v0.0.5/dist/domPanZoom.min.js"></script>
 ```
 
 ---
