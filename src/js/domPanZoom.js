@@ -430,7 +430,7 @@ function domPanZoomWrapper() {
     var container = this.getContainer();
     var panX = wrapper.clientWidth * 0.5 + this.x * -1;
     panX += (this.zoom - 1) * (container.clientWidth * 0.5);
-    var percentX = (panX / container.clientWidth) * 100;
+    var percentX = (panX / (container.clientWidth * this.zoom)) * 100;
     return percentX;
   };
 
@@ -442,7 +442,7 @@ function domPanZoomWrapper() {
     var container = this.getContainer();
     var panY = wrapper.clientHeight * 0.5 + this.y * -1;
     panY += (this.zoom - 1) * (container.clientHeight * 0.5);
-    var percentY = (panY / container.clientHeight) * 100;
+    var percentY = (panY / (container.clientHeight * this.zoom)) * 100;
     return percentY;
   };
 
