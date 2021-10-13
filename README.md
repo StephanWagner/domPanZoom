@@ -91,10 +91,11 @@ You can use the following methods:
 
 | Setters |  |
 | --- | --- |
-| `.panLeft()`<br>`.panRight()`<br>`.panUp()`<br>`.panDown()` | Pan to a specific direction. You can pass a number to pan a specific amount (in percent). Pass `true` as first or second argument to pan instantly, e.g. `.panLeft(50)`, `.panRight(true)`, `.panUp(30, true)` |
-| `.center()` | Move to centered position. Pass true to center instantly, e.g. `.center(true)` |
-| `.zoomTo(2)` | Zoom to a specific zoom level. Pass true as a second argument to zoom instantly, e.g. `.zoomTo(3, true)` |
-| `.zoomIn()`<br>`.zoomOut()` | Zoom in and out. You can pass a number to zoom a specific amount (in percent). Pass `true` as first or second argument to zoom instantly, `.zoomIn(20)`, `.zoomIn(true)`, `.zoomIn(50, true)`<br> |
+| `.panLeft()`<br>`.panRight()`<br>`.panUp()`<br>`.panDown()` | Pan a specific direction. You can pass a number to pan a specific amount (in percent). Pass `true` as first or second argument to pan instantly, e.g. `.panLeft(50)`, `.panRight(true)`, `.panUp(30, true)` |
+| `.panTo(x, y)` | Pan to a specific point. The `x` and `y` values are in percent, so `.panTo(50, 50)` will pan to the center. Pass `true` as third argument to pan instantly, e.g. `.panTo(50, 50, true)`
+| `.center()` | Pan to centered position. Pass `true` to center instantly, e.g. `.center(true)` |
+| `.zoomIn()`<br>`.zoomOut()` | Zoom in and out. You can pass a number to zoom a specific amount (in percent). Pass `true` as first or second argument to zoom instantly, `.zoomIn(20)`, `.zoomIn(true)`, `.zoomIn(50, true)` |
+| `.zoomTo(2)` | Zoom to a specific zoom level. Pass `true` as a second argument to zoom instantly, e.g. `.zoomTo(2, true)` |
 
 ### E.g.
 

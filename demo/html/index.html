@@ -25,6 +25,9 @@
         <div style="text-align: center">
           <button onclick="myPanZoom.zoomTo(1)">Zoom to 1</button>
           <button onclick="myPanZoom.zoomTo(2)">Zoom to 2</button>
+          <button onclick="myPanZoom.zoomTo(3)">Zoom to 3</button>
+          <button onclick="myPanZoom.zoomTo(3.4567)">Zoom to 3.4567</button>
+          <button onclick="myPanZoom.zoomTo(4)">Zoom to 4</button>
           <button onclick="myPanZoom.zoomTo(5)">Zoom to 5</button>
           <button onclick="myPanZoom.zoomTo(20)">Zoom to 20</button>
           <button onclick="myPanZoom.zoomTo(0.5)">Zoom to 0.5</button>
@@ -46,10 +49,17 @@
           <button onclick="myPanZoom.panDown()">panDown</button>
           <button onclick="myPanZoom.panRight(200)">Pan Right 200%</button>
           <br />
-          <button onclick="myPanZoom.panTo(30, 80)">panTo 30 80</button>
-          <button onclick="myPanZoom.panTo(100, 100, true)">
-            panTo 100 100 (instant)
+          <button onclick="myPanZoom.panTo(0, 0)">panTo 0 0</button>
+          <button onclick="myPanZoom.panTo(10, 10)">panTo 10 10</button>
+          <button onclick="myPanZoom.panTo(90, 90)">panTo 90 90</button>
+          <button onclick="myPanZoom.panTo(25, 25)">panTo 25 25</button>
+          <button onclick="myPanZoom.panTo(50, 0)">panTo 50 0</button>
+          <button onclick="myPanZoom.panTo(100, 0)">panTo 100 0</button>
+          <button onclick="myPanZoom.panTo(90, 55)">panTo 90 55</button>
+          <button onclick="myPanZoom.panTo(0, 0, true)">
+            panTo 0 0 (instant)
           </button>
+          <button onclick="myPanZoom.panTo(100, 100)">panTo 100 100</button>
         </div>
 
         <style>
@@ -100,7 +110,7 @@
             wrapperElementID: 'prototype__wrapper',
             panZoomElementID: 'prototype__container',
 
-            bounds: false,
+            // bounds: false,
 
             onChange: function () {
               document.getElementById('protype__zoom').innerHTML =

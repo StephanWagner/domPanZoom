@@ -23,7 +23,7 @@ function domPanZoomWrapper() {
       minZoom: 0.1,
       maxZoom: 10,
 
-      // How many percent to zoom with the methods zoomIn and zoomOut
+      // How many percent to zoom by default with the methods zoomIn and zoomOut
       zoomStep: 50,
 
       // The speed in which to zoom when using mouse wheel
@@ -32,7 +32,7 @@ function domPanZoomWrapper() {
       // Initial zoom
       initialZoom: 1,
 
-      // How many percent to move with the panning methods
+      // How many percent to pan by default with the panning methods panLeft, panRight, panUp and panDown
       panStep: 10,
 
       // Initial pan
@@ -408,15 +408,7 @@ function domPanZoomWrapper() {
 
   // Center container within wrapper
   domPanZoom.prototype.center = function (instant) {
-    var wrapper = this.getWrapper();
-    var container = this.getContainer();
-
-    var diffX = wrapper.clientWidth - container.clientWidth;
-    var diffY = wrapper.clientHeight - container.clientHeight;
-    this.x = diffX * 0.5;
-    this.y = diffY * 0.5;
-
-    this.setPosition(instant);
+    this.panTo(50, 50, instant);
   };
 
   // Getters for pan
@@ -439,20 +431,17 @@ function domPanZoomWrapper() {
   domPanZoom.prototype.panTo = function (x, y, instant) {
     var wrapper = this.getWrapper();
     var container = this.getContainer();
-    var wrapperWidth = wrapper.clientWidth;
-    var wrapperHeight = wrapper.clientHeight;
-    var containerWidth = container.clientWidth;
-    var containerHeight = container.clientHeight;
 
-    var panX = ((containerWidth * x) / 100) * this.zoom;
-    var panY = ((containerHeight * y) / 100) * this.zoom;
+    var panX = ((container.clientWidth * this.zoom * x) / 100) * -1;
+    panX += (this.zoom - 1) * (container.clientWidth * 0.5);
+    panX += wrapper.clientWidth * 0.5;
 
-    console.log(panX, panY);
+    var panY = ((container.clientHeight * this.zoom * y) / 100) * -1;
+    panY += (this.zoom - 1) * (container.clientHeight * 0.5);
+    panY += wrapper.clientHeight * 0.5;
 
-    // TODO shgould be centered
-
-    this.x = x * this.zoom;
-    this.y = y * this.zoom;
+    this.x = panX;
+    this.y = panY;
     this.setPosition(instant);
   };
 
@@ -547,7 +536,9 @@ function domPanZoomWrapper() {
 
   // Enable or disable transitions
   domPanZoom.prototype.transition = function (enabled) {
-    this.getContainer().style.transition = enabled ? 'transform ' + this.options.transitionSpeed + 'ms' : null;
+    this.getContainer().style.transition = enabled
+      ? 'transform ' + this.options.transitionSpeed + 'ms'
+      : null;
   };
 
   return domPanZoom;
