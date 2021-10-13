@@ -54,15 +54,16 @@ You can pass the following options into domPanZoom:
 
 | Option | Default |  |
 | --- | --- | --- |
-| `center` | `true` | Start with a centered position. This options overrides options initalPanX and initialPanY |
+| `center` | `true` | Start with a centered position. This option overrides options initalPanX and initialPanY |
 | `bounds` | `cover` | Set this option to `'contain'` or `'cover'` to limit the boundries of the panZoomElement to the wrapperElement. This works similar to the CSS property background-size: contain / cover. Setting this option might effect the option minZoom |
 | `minZoom` | `0.1` | Minimum zoom |
 | `maxZoom` | `10` | Maximum zoom |
-| `zoomStep` | `50` | How many percent to zoom with the methods zoomIn and zoomOut |
+| `panStep` | `10` | How many percent to pan by default with the panning methods panLeft, panRight, panUp and panDown |
+| `zoomStep` | `50` | How many percent to zoom by default with the methods zoomIn and zoomOut |
 | `zoomWheelSpeed` | `1` | The speed in which to zoom when using mouse wheel |
-| `panStep` | `10` | How many percent to pan with the methods panLeft, panRight, panUp and panDown |
-| `initialPanX` | `0` | Initial horizontal pan |
-| `initialZoom` | `0` | Initial vertical pan |
+| `initialZoom` | `1` | Initial zoom level |
+| `initialPanX` | `0` | Initial horizontal pan in percent |
+| `initialPanY` | `0` | Initial vertical pan in percent |
 | `transitionSpeed` | `400` | Transition speed in milliseconds, higher values are slower |
 
 ### E.g.
@@ -84,10 +85,10 @@ You can use the following methods:
 
 | Getters |  |
 | --- | --- |
-| `.getPan()` | Returns an object with x and y values of current pan position |
-| `.getPanX()` | Returns current pan x position |
-| `.getPanY()` | Returns current pan y position |
-| `.getZoom()` | Returns current zoom level |
+| `.getPan()` | Returns an object with x and y values of current pan position. You can pass `true` to get the actual pixel values, e.g. `.getPan(true)` |
+| `.getPanX()` | Returns the current pan x position. You can pass `true` to get the actual pixel values, e.g. `.getPanX(true)` |
+| `.getPanY()` | Returns the current pan y position. You can pass `true` to get the actual pixel values, e.g. `.getPanY(true)` |
+| `.getZoom()` | Returns the current zoom level |
 
 | Setters |  |
 | --- | --- |

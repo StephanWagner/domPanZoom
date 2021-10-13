@@ -11,7 +11,7 @@ function domPanZoomWrapper() {
       panZoomElementID: '',
 
       // Start with a centered position
-      // This options overrides options initalPanX and initialPanY
+      // This option overrides options initalPanX and initialPanY
       center: true,
 
       // Set this option to 'contain' or 'cover' to limit the boundries of the panZoomElement to the wrapperElement
@@ -23,6 +23,9 @@ function domPanZoomWrapper() {
       minZoom: 0.1,
       maxZoom: 10,
 
+      // How many percent to pan by default with the panning methods panLeft, panRight, panUp and panDown
+      panStep: 10,
+
       // How many percent to zoom by default with the methods zoomIn and zoomOut
       zoomStep: 50,
 
@@ -32,10 +35,7 @@ function domPanZoomWrapper() {
       // Initial zoom
       initialZoom: 1,
 
-      // How many percent to pan by default with the panning methods panLeft, panRight, panUp and panDown
-      panStep: 10,
-
-      // Initial pan
+      // Initial pan in percent
       initialPanX: 0,
       initialPanY: 0,
 
@@ -102,7 +102,11 @@ function domPanZoomWrapper() {
     this.y = this.options.initialPanY;
 
     // Set position
-    this.options.center ? this.center(true) : this.setPosition(true);
+    if (this.options.center) {
+      this.center(true);
+    } else {
+      this.panTo(this.options.initialPanX, this.options.initialPanY, true);
+    }
 
     // Trigger event
     this.fireEvent('onInit', this.getPosition());
@@ -412,19 +416,35 @@ function domPanZoomWrapper() {
   };
 
   // Getters for pan
-  domPanZoom.prototype.getPan = function () {
+  domPanZoom.prototype.getPan = function (pixelValues) {
     return {
-      x: this.x,
-      y: this.y
+      x: this.getPanX(pixelValues),
+      y: this.getPanY(pixelValues)
     };
   };
 
-  domPanZoom.prototype.getPanX = function () {
-    return this.x;
+  domPanZoom.prototype.getPanX = function (pixelValues) {
+    if (pixelValues) {
+      return this.x;
+    }
+    var wrapper = this.getWrapper();
+    var container = this.getContainer();
+    var panX = wrapper.clientWidth * 0.5 + this.x * -1;
+    panX += (this.zoom - 1) * (container.clientWidth * 0.5);
+    var percentX = (panX / container.clientWidth) * 100;
+    return percentX;
   };
 
-  domPanZoom.prototype.getPanY = function () {
-    return this.y;
+  domPanZoom.prototype.getPanY = function (pixelValues) {
+    if (pixelValues) {
+      return this.y;
+    }
+    var wrapper = this.getWrapper();
+    var container = this.getContainer();
+    var panY = wrapper.clientHeight * 0.5 + this.y * -1;
+    panY += (this.zoom - 1) * (container.clientHeight * 0.5);
+    var percentY = (panY / container.clientHeight) * 100;
+    return percentY;
   };
 
   // Pan to position

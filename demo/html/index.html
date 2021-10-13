@@ -104,22 +104,34 @@
         <div>Zoom: <span id="protype__zoom"></span></div>
         <div>Pan X: <span id="protype__pan-x"></span></div>
         <div>Pan Y: <span id="protype__pan-y"></span></div>
+        <div>Pan X (percent): <span id="protype__pan-x-percent"></span></div>
+        <div>Pan Y (percent): <span id="protype__pan-y-percent"></span></div>
 
         <script>
           var myPanZoom = new domPanZoom({
             wrapperElementID: 'prototype__wrapper',
             panZoomElementID: 'prototype__container',
 
-            // bounds: false,
+            bounds: false,
+            // center: false,
+
+            // initialPanX: 90,
+            // initialPanY: 50,
 
             onChange: function () {
               document.getElementById('protype__zoom').innerHTML =
                 this.getZoom();
 
               document.getElementById('protype__pan-x').innerHTML =
-                this.getPanX();
+                this.getPanX(true);
 
               document.getElementById('protype__pan-y').innerHTML =
+                this.getPanY(true);
+
+              document.getElementById('protype__pan-x-percent').innerHTML =
+                this.getPanX();
+
+              document.getElementById('protype__pan-y-percent').innerHTML =
                 this.getPanY();
             }
           });
