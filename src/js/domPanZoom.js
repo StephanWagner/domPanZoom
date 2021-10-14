@@ -1,7 +1,7 @@
 // Wrapper function
 function domPanZoomWrapper() {
   var domPanZoom = function (options) {
-    // Default options, pass a custom options object to override
+    // Default options, pass a custom options object when initializing domPanZoom to override
     var defaultOptions = {
       // The ID of the wrapper element
       wrapperElementID: '',
