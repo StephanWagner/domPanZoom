@@ -11,6 +11,46 @@
   </head>
 
   <body>
+
+
+    <div id="INDICATOR"></div>
+    <style>
+      #INDICATOR {
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(255, 0, 0, 0.5);
+        transform: translate(-50%, -50%);
+        z-index: 15;
+        pointer-events: none;
+      }
+
+      #INDICATOR::after,
+      #INDICATOR::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #000;
+      }
+
+      #INDICATOR::after {
+        width: 20px;
+        height: 1px;
+      }
+
+      #INDICATOR::before {
+        width: 1px;
+        height: 20px;
+      }
+    </style>
+
+
+
     <div class="demo__wrapper">
       <!-- Demo image -->
 
@@ -112,11 +152,11 @@
             wrapperElementID: 'prototype__wrapper',
             panZoomElementID: 'prototype__container',
 
-            // bounds: false,
-            // center: false,
+            bounds: false,
+            center: false,
 
-            // initialPanX: 90,
-            // initialPanY: 50,
+            initialPanX: 90,
+            initialPanY: 60,
 
             onChange: function () {
               document.getElementById('protype__zoom').innerHTML =

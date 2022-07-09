@@ -2,21 +2,23 @@
 // Wrapper function
 function domPanZoomWrapper() {
   var domPanZoom = function (options) {
-    // Default options, pass a custom options object to override
+    // Default options, pass a custom options object when initializing domPanZoom to override
     var defaultOptions = {
       // The ID of the wrapper element
       wrapperElementID: '',
 
-      // The ID of the container element
+      // The ID of the element that will be zoomed
+      // This element should be directly within the wrapper element
       panZoomElementID: '',
 
       // Start with a centered position
       // This option overrides options initalPanX and initialPanY
       center: true,
 
-      // Set this option to 'contain' or 'cover' to limit the boundries of the panZoomElement to the wrapperElement
-      // This works similar to the CSS property background-size: contain / cover
-      // Setting this option might effect the option minZoom
+      // Setting this option to 'contain' or 'cover' limits the boundries of the panZoomElement to the wrapperElement
+      // This works similar to the CSS property 'background-size: contain / cover'
+      // Disable bound by setting this option to 'false'
+      // This option might effect the option minZoom
       bounds: 'cover',
 
       // Minimum and maximum zoom
@@ -36,6 +38,7 @@ function domPanZoomWrapper() {
       initialZoom: 1,
 
       // Initial pan in percent
+      // The option 'center' has to be 'false' for initial panning to work
       initialPanX: 0,
       initialPanY: 0,
 
@@ -202,26 +205,31 @@ function domPanZoomWrapper() {
       deltaAdjustedSpeed = 1 - sign * deltaAdjustedSpeed;
       var nextZoom = this.sanitizeZoom(this.zoom * deltaAdjustedSpeed);
 
-      // var wrapper = this.getWrapper();
-      // var container = this.getContainer();
-      // var diffX = wrapper.clientWidth - container.clientWidth;
-      // var diffY = wrapper.clientHeight - container.clientHeight;
-      // var centerX = diffX * 0.5;
-      // var centerY = diffY * 0.5;
-      // var offsetX = this.x - centerX;
-      // var offsetY = this.y - centerY;
+      var wrapper = this.getWrapper();
+      var wrapperWidth = wrapper.clientWidth;
+      var wrapperHeight = wrapper.clientHeight;
+      var centerX = wrapperWidth / 2;
+      var centerY = wrapperHeight / 2;
 
-      // var offsetToParent = this.getEventOffsetToParent(ev);
+      var offsetToParent = this.getEventOffsetToParent(ev);
 
-      // // var offsetX = wrapperCenterX; // - offsetToParent.x;
-      // // var offsetY = wrapperCenterY; // - offsetToParent.y;
+      // WORKING!!!
+      // TODO But NOT WORKING when moved!!!!
 
-      // console.log('offsetToParent', offsetToParent, offsetX, offsetY);
+      var offsetToCenter = {
+        x: offsetToParent.x - centerX + window.scrollX,
+        y: offsetToParent.y - centerY + window.scrollY
+      };
 
-      // var currentZoom = this.zoom;
-      // var zoomGrowth = (nextZoom - currentZoom) / currentZoom;
-      // this.x += offsetX * zoomGrowth;
-      // this.y += offsetY * zoomGrowth;
+      this.x =
+        this.x -
+        offsetToCenter.x * -1 * (this.zoom - 1) +
+        offsetToCenter.x * -1 * (nextZoom - 1);
+
+      this.y =
+        this.y -
+        offsetToCenter.y * -1 * (this.zoom - 1) +
+        offsetToCenter.y * -1 * (nextZoom - 1);
 
       this.zoom = nextZoom;
       this.setPosition(true);
