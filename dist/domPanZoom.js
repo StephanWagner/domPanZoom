@@ -69,6 +69,10 @@ function domPanZoomWrapper() {
     wrapper.style.cursor = 'grab';
     wrapper.style.overflow = 'hidden';
 
+    // Cache
+    this.evCache = [];
+    this.prevDiff = -1;
+
     // Attach events
     this.attachEvents();
 
@@ -231,6 +235,84 @@ function domPanZoomWrapper() {
     this.getWrapper().addEventListener('wheel', mouseWheelEvent, {
       passive: false
     });
+
+    // Pinch events
+    var pointerDownEvent = function (ev) {
+      this.evCache.push(ev);
+    }.bind(this);
+
+    this.getWrapper().addEventListener('pointerdown', pointerDownEvent, {
+      passive: false
+    });
+
+    var pointerMoveEvent = function (ev) {
+      for (let i = 0; i < this.evCache.length; i++) {
+        if (ev.pointerId == this.evCache[i].pointerId) {
+          this.evCache[i] = ev;
+          break;
+        }
+      }
+
+      if (this.evCache.length == 2) {
+        var curDiff = Math.abs(
+          this.evCache[0].clientX - this.evCache[1].clientX
+        );
+
+        console.log(curDiff);
+
+        if (this.prevDiff > 0) {
+          if (curDiff > this.prevDiff) {
+            // Zoom in
+            console.log('Pinch moving OUT -> Zoom in', ev);
+            ev.target.style.background = 'pink';
+
+
+            document.getElementById('prototype__pinch-out').innerHTML = curDiff;
+
+          }
+
+          // Zoom out
+          if (curDiff < this.prevDiff) {
+            console.log('Pinch moving IN -> Zoom out', ev);
+            ev.target.style.background = 'lightblue';
+
+            document.getElementById('prototype__pinch-in').innerHTML = curDiff;
+          }
+        }
+        this.prevDiff = curDiff;
+      }
+    }.bind(this);
+
+    this.getWrapper().addEventListener('pointermove', pointerMoveEvent, {
+      passive: false
+    });
+
+    var pointerUpEvent = function (ev) {
+      for (var i = 0; i < this.evCache.length; i++) {
+        if (this.evCache[i].pointerId == ev.pointerId) {
+          this.evCache.splice(i, 1);
+          break;
+        }
+      }
+
+      if (this.evCache.length < 2) {
+        this.prevDiff = -1;
+      }
+    }.bind(this);
+
+    var pointerUpEvents = [
+      'pointerup',
+      'pointercancel',
+      'pointerout',
+      'pointerleave'
+    ];
+    pointerUpEvents.forEach(
+      function (event) {
+        this.getWrapper().addEventListener(event, pointerUpEvent, {
+          passive: false
+        });
+      }.bind(this)
+    );
   };
 
   // https://stackoverflow.com/questions/8389156/what-substitute-should-we-use-for-layerx-layery-since-they-are-deprecated-in-web

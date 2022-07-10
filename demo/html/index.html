@@ -102,11 +102,13 @@
           }
         </style>
 
-        <div>Zoom: <span id="protype__zoom"></span></div>
-        <div>Pan X: <span id="protype__pan-x"></span></div>
-        <div>Pan Y: <span id="protype__pan-y"></span></div>
-        <div>Pan X (percent): <span id="protype__pan-x-percent"></span></div>
-        <div>Pan Y (percent): <span id="protype__pan-y-percent"></span></div>
+        <div>Pinch in: <span id="prototype__pinch-in"></span></div>
+        <div>Pinch out: <span id="prototype__pinch-out"></span></div>
+        <div>Zoom: <span id="prototype__zoom"></span></div>
+        <div>Pan X: <span id="prototype__pan-x"></span></div>
+        <div>Pan Y: <span id="prototype__pan-y"></span></div>
+        <div>Pan X (percent): <span id="prototype__pan-x-percent"></span></div>
+        <div>Pan Y (percent): <span id="prototype__pan-y-percent"></span></div>
 
         <script>
           var myPanZoom = new domPanZoom({
@@ -114,25 +116,25 @@
             panZoomElementID: 'prototype__container',
 
             bounds: false,
-            center: false,
+            center: true,
 
             initialPanX: 0,
             initialPanY: 0,
 
             onChange: function () {
-              document.getElementById('protype__zoom').innerHTML =
+              document.getElementById('prototype__zoom').innerHTML =
                 this.getZoom();
 
-              document.getElementById('protype__pan-x').innerHTML =
+              document.getElementById('prototype__pan-x').innerHTML =
                 this.getPanX(true);
 
-              document.getElementById('protype__pan-y').innerHTML =
+              document.getElementById('prototype__pan-y').innerHTML =
                 this.getPanY(true);
 
-              document.getElementById('protype__pan-x-percent').innerHTML =
+              document.getElementById('prototype__pan-x-percent').innerHTML =
                 this.getPanX();
 
-              document.getElementById('protype__pan-y-percent').innerHTML =
+              document.getElementById('prototype__pan-y-percent').innerHTML =
                 this.getPanY();
             }
           });
