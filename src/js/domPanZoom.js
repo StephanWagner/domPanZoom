@@ -204,32 +204,25 @@ function domPanZoomWrapper() {
       deltaAdjustedSpeed = 1 - sign * deltaAdjustedSpeed;
       var nextZoom = this.sanitizeZoom(this.zoom * deltaAdjustedSpeed);
 
+      // Get offset from center, then adjust
       var wrapper = this.getWrapper();
-      var wrapperWidth = wrapper.clientWidth;
-      var wrapperHeight = wrapper.clientHeight;
-      var centerX = wrapperWidth / 2;
-      var centerY = wrapperHeight / 2;
+      var container = this.getContainer();
+      var diffX = wrapper.clientWidth - container.clientWidth;
+      var diffY = wrapper.clientHeight - container.clientHeight;
+      var centerX = diffX * 0.5;
+      var centerY = diffY * 0.5;
 
       var offsetToParent = this.getEventOffsetToParent(ev);
-
-      // WORKING!!!
-      // TODO But NOT WORKING when moved!!!!
-
       var offsetToCenter = {
-        x: offsetToParent.x - centerX + window.scrollX,
-        y: offsetToParent.y - centerY + window.scrollY
+        x: wrapper.clientWidth / 2 - offsetToParent.x + window.scrollX,
+        y: wrapper.clientHeight / 2 - offsetToParent.y + window.scrollY
       };
 
-      this.x =
-        this.x -
-        offsetToCenter.x * -1 * (this.zoom - 1) +
-        offsetToCenter.x * -1 * (nextZoom - 1);
+      var offsetX = this.x - centerX + offsetToCenter.x;
+      var offsetY = this.y - centerY + offsetToCenter.y;
+      this.adjustPositionByZoom(nextZoom, offsetX, offsetY);
 
-      this.y =
-        this.y -
-        offsetToCenter.y * -1 * (this.zoom - 1) +
-        offsetToCenter.y * -1 * (nextZoom - 1);
-
+      // Set new zoom
       this.zoom = nextZoom;
       this.setPosition(true);
     }.bind(this);
