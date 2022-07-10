@@ -214,12 +214,12 @@ function domPanZoomWrapper() {
 
       var offsetToParent = this.getEventOffsetToParent(ev);
       var offsetToCenter = {
-        x: wrapper.clientWidth / 2 - offsetToParent.x + window.scrollX,
-        y: wrapper.clientHeight / 2 - offsetToParent.y + window.scrollY
+        x: (wrapper.clientWidth / 2 - offsetToParent.x - window.scrollX) * -1,
+        y: (wrapper.clientHeight / 2 - offsetToParent.y - window.scrollY) * -1
       };
 
-      var offsetX = this.x - centerX + offsetToCenter.x;
-      var offsetY = this.y - centerY + offsetToCenter.y;
+      var offsetX = this.x - centerX - offsetToCenter.x;
+      var offsetY = this.y - centerY - offsetToCenter.y;
       this.adjustPositionByZoom(nextZoom, offsetX, offsetY);
 
       // Set new zoom
