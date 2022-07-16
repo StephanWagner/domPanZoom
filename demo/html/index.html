@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link href="./demo.css" rel="stylesheet" />
-    <script src="../../dist/domPanZoom.js"></script>
+    <script src="../../dist/domPanZoom.js?v=1"></script>
   </head>
 
   <body>
@@ -18,6 +18,17 @@
       <div class="demo__container">
         <br />
         <h2>Image</h2>
+
+        <div>centerX: <span id="prototype__cx"></span></div>
+        <div>centerY: <span id="prototype__cy"></span></div>
+        <div>curDiff: <span id="prototype__curdiff"></span></div>
+        <div>Pinch in: <span id="prototype__pinch-in"></span></div>
+        <div>Pinch out: <span id="prototype__pinch-out"></span></div>
+        <div>Zoom: <span id="prototype__zoom"></span></div>
+        <div>Pan X: <span id="prototype__pan-x"></span></div>
+        <div>Pan Y: <span id="prototype__pan-y"></span></div>
+        <div>Pan X (percent): <span id="prototype__pan-x-percent"></span></div>
+        <div>Pan Y (percent): <span id="prototype__pan-y-percent"></span></div>
 
         <div id="prototype__wrapper">
           <img id="prototype__container" src="SAM_2726-E.JPG" />
@@ -101,14 +112,6 @@
             height: 400px;
           }
         </style>
-
-        <div>Pinch in: <span id="prototype__pinch-in"></span></div>
-        <div>Pinch out: <span id="prototype__pinch-out"></span></div>
-        <div>Zoom: <span id="prototype__zoom"></span></div>
-        <div>Pan X: <span id="prototype__pan-x"></span></div>
-        <div>Pan Y: <span id="prototype__pan-y"></span></div>
-        <div>Pan X (percent): <span id="prototype__pan-x-percent"></span></div>
-        <div>Pan Y (percent): <span id="prototype__pan-y-percent"></span></div>
 
         <script>
           var myPanZoom = new domPanZoom({

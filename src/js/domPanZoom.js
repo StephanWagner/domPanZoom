@@ -31,7 +31,10 @@ function domPanZoomWrapper() {
       zoomStep: 50,
 
       // The speed in which to zoom when using mouse wheel
-      zoomWheelSpeed: 1,
+      zoomSpeedWheel: 1,
+
+      // The speed in which to zoom when pinching
+      zoomSpeedPinch: 4,
 
       // Initial zoom
       initialZoom: 1,
@@ -127,6 +130,10 @@ function domPanZoomWrapper() {
   domPanZoom.prototype.attachEvents = function () {
     // Event while mouse moving
     var setPositionEvent = function (ev) {
+      if (this.blockPan == true) {
+        return;
+      }
+
       var event = ev;
       if (ev.touches && ev.touches.length) {
         event = ev.touches[0];
@@ -200,7 +207,7 @@ function domPanZoomWrapper() {
       }
 
       // Speed
-      var speed = this.options.zoomWheelSpeed;
+      var speed = this.options.zoomSpeedWheel;
 
       // Adjust speed (copied from https://github.com/anvaka/panzoom/blob/master/index.js#L884)
       var sign = Math.sign(delta);
@@ -209,22 +216,12 @@ function domPanZoomWrapper() {
       var nextZoom = this.sanitizeZoom(this.zoom * deltaAdjustedSpeed);
 
       // Get offset from center, then adjust
-      var wrapper = this.getWrapper();
-      var container = this.getContainer();
-      var diffX = wrapper.clientWidth - container.clientWidth;
-      var diffY = wrapper.clientHeight - container.clientHeight;
-      var centerX = diffX * 0.5;
-      var centerY = diffY * 0.5;
+      var offsetToCenter = this.getEventOffsetToCenter(ev);
 
-      var offsetToParent = this.getEventOffsetToParent(ev);
-      var offsetToCenter = {
-        x: (wrapper.clientWidth / 2 - offsetToParent.x - window.scrollX) * -1,
-        y: (wrapper.clientHeight / 2 - offsetToParent.y - window.scrollY) * -1
-      };
+      document.getElementById('prototype__cx').innerHTML = offsetToCenter.x;
+      document.getElementById('prototype__cy').innerHTML = offsetToCenter.y;
 
-      var offsetX = this.x - centerX - offsetToCenter.x;
-      var offsetY = this.y - centerY - offsetToCenter.y;
-      this.adjustPositionByZoom(nextZoom, offsetX, offsetY);
+      this.adjustPositionByZoom(nextZoom, offsetToCenter.x, offsetToCenter.y);
 
       // Set new zoom
       this.zoom = nextZoom;
@@ -238,6 +235,14 @@ function domPanZoomWrapper() {
     // Pinch events
     var pointerDownEvent = function (ev) {
       this.evCache.push(ev);
+      this.zoomCache = this.zoom;
+      if (this.evCache.length == 2) {
+        this.curDiffCache = this.getTouchEventsDistance(
+          this.evCache[0],
+          this.evCache[1]
+        );
+        this.blockPan = true;
+      }
     }.bind(this);
 
     this.getWrapper().addEventListener('pointerdown', pointerDownEvent, {
@@ -253,31 +258,46 @@ function domPanZoomWrapper() {
       }
 
       if (this.evCache.length == 2) {
-        var curDiff = Math.abs(
-          this.evCache[0].clientX - this.evCache[1].clientX
+        var container = this.getContainer();
+
+        // TODO function
+        var curDiff = this.getTouchEventsDistance(
+          this.evCache[0],
+          this.evCache[1]
+        );
+        curDiff -= this.curDiffCache;
+
+        var curDiffPercent = curDiff / container.clientWidth;
+
+        curDiffPercent *= this.options.zoomSpeedPinch;
+        curDiffPercent += 1;
+
+        document.getElementById('prototype__curdiff').innerHTML = curDiff;
+
+        var nextZoom = this.sanitizeZoom(this.zoomCache * curDiffPercent);
+
+        var touchEventsCenter = this.getTouchEventsCenter(
+          this.evCache[0],
+          this.evCache[1]
         );
 
-        console.log(curDiff);
+        var offsetToCenter = this.getEventOffsetToCenter({
+          target: this.evCache[0].target,
+          clientX: touchEventsCenter.clientX,
+          clientY: touchEventsCenter.clientY
+        });
 
-        if (this.prevDiff > 0) {
-          if (curDiff > this.prevDiff) {
-            // Zoom in
-            console.log('Pinch moving OUT -> Zoom in', ev);
-            ev.target.style.background = 'pink';
+        document.getElementById('prototype__cx').innerHTML = offsetToCenter.x;
+        document.getElementById('prototype__cy').innerHTML = offsetToCenter.y;
 
+        this.adjustPositionByZoom(nextZoom, offsetToCenter.x, offsetToCenter.y);
 
-            document.getElementById('prototype__pinch-out').innerHTML = curDiff;
+        // TODO calculate both finger movement and pan here, remember to fire pan event too event
+        // TODOcheck fireing events
 
-          }
+        this.zoom = nextZoom;
+        this.setPosition(true);
 
-          // Zoom out
-          if (curDiff < this.prevDiff) {
-            console.log('Pinch moving IN -> Zoom out', ev);
-            ev.target.style.background = 'lightblue';
-
-            document.getElementById('prototype__pinch-in').innerHTML = curDiff;
-          }
-        }
         this.prevDiff = curDiff;
       }
     }.bind(this);
@@ -296,6 +316,7 @@ function domPanZoomWrapper() {
 
       if (this.evCache.length < 2) {
         this.prevDiff = -1;
+        this.blockPan = false;
       }
     }.bind(this);
 
@@ -330,6 +351,45 @@ function domPanZoomWrapper() {
     y = ev.clientY - y;
 
     return { x: x, y: y };
+  };
+
+  // Get the event offset to the center
+  domPanZoom.prototype.getEventOffsetToCenter = function (ev) {
+    var wrapper = this.getWrapper();
+    var container = this.getContainer();
+    var diffX = wrapper.clientWidth - container.clientWidth;
+    var diffY = wrapper.clientHeight - container.clientHeight;
+    var centerX = diffX * 0.5;
+    var centerY = diffY * 0.5;
+
+    var offsetToParent = this.getEventOffsetToParent(ev);
+    var offsetToCenter = {
+      x: (wrapper.clientWidth / 2 - offsetToParent.x - window.scrollX) * -1,
+      y: (wrapper.clientHeight / 2 - offsetToParent.y - window.scrollY) * -1
+    };
+
+    var offsetX = this.x - centerX - offsetToCenter.x;
+    var offsetY = this.y - centerY - offsetToCenter.y;
+
+    return {
+      x: offsetX,
+      y: offsetY
+    };
+  };
+
+  // Get the distance between two touch events
+  domPanZoom.prototype.getTouchEventsDistance = function (ev1, ev2) {
+    return Math.abs(Math.hypot(ev1.pageX - ev1.pageX, ev1.pageY - ev2.pageY));
+  };
+
+  // Get the center point between two touch events
+  domPanZoom.prototype.getTouchEventsCenter = function (ev1, ev2) {
+    return {
+      pageX: (ev1.pageX + ev2.pageX) / 2,
+      pageY: (ev1.pageY + ev2.pageX) / 2,
+      clientX: (ev1.clientX + ev2.clientX) / 2,
+      clientY: (ev1.clientY + ev2.clientY) / 2
+    };
   };
 
   // Get current position values
