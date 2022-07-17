@@ -448,6 +448,9 @@ function domPanZoomWrapper() {
 
     // Trigger event
     this.fireEvent('onChange', this.getPosition());
+
+    // Return instance
+    return this;
   };
 
   // Sanitize zoom value
@@ -485,16 +488,19 @@ function domPanZoomWrapper() {
 
     // Trigger event
     this.fireEvent('onZoom', this.getPosition());
+
+    // Return instance
+    return this;
   };
 
   // Zoom in
   domPanZoom.prototype.zoomIn = function (step, instant) {
-    this.zoomInOut(step, instant, 'in');
+    return this.zoomInOut(step, instant, 'in');
   };
 
   // Zoom out
   domPanZoom.prototype.zoomOut = function (step, instant) {
-    this.zoomInOut(step, instant, 'out');
+    return this.zoomInOut(step, instant, 'out');
   };
 
   // Zoom in or out
@@ -515,7 +521,7 @@ function domPanZoomWrapper() {
     var nextZoom = currentZoom * zoomStep;
 
     // Update zoom
-    this.zoomTo(nextZoom, instant);
+    return this.zoomTo(nextZoom, instant);
   };
 
   // Adjust position when zooming
@@ -539,7 +545,7 @@ function domPanZoomWrapper() {
 
   // Center container within wrapper
   domPanZoom.prototype.center = function (instant) {
-    this.panTo(50, 50, instant);
+    return this.panTo(50, 50, instant);
   };
 
   // Getters for pan
@@ -595,22 +601,25 @@ function domPanZoomWrapper() {
 
     // Trigger event
     this.fireEvent('onPan', this.getPosition());
+
+    // Return instance
+    return this;
   };
 
   domPanZoom.prototype.panLeft = function (step, instant) {
-    this.pan(step, instant, 'left');
+    return this.pan(step, instant, 'left');
   };
 
   domPanZoom.prototype.panRight = function (step, instant) {
-    this.pan(step, instant, 'right');
+    return this.pan(step, instant, 'right');
   };
 
   domPanZoom.prototype.panUp = function (step, instant) {
-    this.pan(step, instant, 'up');
+    return this.pan(step, instant, 'up');
   };
 
   domPanZoom.prototype.panDown = function (step, instant) {
-    this.pan(step, instant, 'down');
+    return this.pan(step, instant, 'down');
   };
 
   domPanZoom.prototype.pan = function (step, instant, direction) {
@@ -634,6 +643,9 @@ function domPanZoomWrapper() {
 
     // Trigger event
     this.fireEvent('onPan', this.getPosition());
+
+    // Return instance
+    return this;
   };
 
   // Get the wrapper element
