@@ -9,7 +9,7 @@ A lightweight library providing mobile friendly panning and zooming to any HTML 
 ### ES6
 
 ```bash
-npm install --save dompanzoom
+npm install dompanzoom --save
 ```
 
 ```javascript
@@ -48,6 +48,8 @@ new domPanZoom({
 
 The options `wrapperElement` and `panZoomElement` are required.\
 You can use any query selector or the actual DOM element instance.
+
+> It is highly recommended to give the `panZoomElement` an actual width and height via CSS to avoid size calculation errors due to DOM drawing issues.
 
 ---
 
@@ -98,7 +100,7 @@ You can use the following methods:
 | `.panLeft()`<br>`.panRight()`<br>`.panUp()`<br>`.panDown()` | Pan a specific direction. You can pass a number to pan a specific amount (in percent). Pass `true` as first or second argument to pan instantly, e.g. `.panLeft(50)`, `.panRight(true)`, `.panUp(30, true)` |
 | `.panTo(x, y)` | Pan to a specific position. The `x` and `y` values are in percent, so `.panTo(50, 50)` will pan to the center. Pass `true` as third argument to pan instantly, e.g. `.panTo(50, 50, true)`
 | `.center()` | Pan to centered position. Pass `true` to center instantly, e.g. `.center(true)` |
-| `.zoomIn()`<br>`.zoomOut()` | Zoom in and out. You can pass a number to zoom a specific amount (in percent). Pass `true` as first or second argument to zoom instantly, `.zoomIn(20)`, `.zoomIn(true)`, `.zoomIn(50, true)` |
+| `.zoomIn()`<br>`.zoomOut()` | Zoom in and out. You can pass a number to zoom a specific amount (in percent). Pass `true` as first or second argument to zoom instantly, e.g. `.zoomIn(20)`, `.zoomIn(true)`, `.zoomIn(50, true)` |
 | `.zoomTo(2)` | Zoom to a specific zoom level. Pass `true` as a second argument to zoom instantly, e.g. `.zoomTo(2, true)` |
 
 ### E.g.
@@ -126,11 +128,11 @@ myDomPanZoom.panTo(20, 80);
 ### E.g.
 
 ```javascript
-var myDomPanZoom = new domPanZoom({
+new domPanZoom({
   wrapperElement: '#my-wrapper',
   panZoomElement: '#my-container'
   onZoom: function (position) {
-    console.log(position);
+    console.log(this.zoom, position);
   }
 });
 ```
