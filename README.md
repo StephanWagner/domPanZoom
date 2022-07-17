@@ -1,6 +1,6 @@
 # domPanZoom
 
-Add mobile friendly panning and zooming to any HTML DOM element.
+A lightweight library providing mobile friendly panning and zooming to any HTML DOM element.
 
 ---
 
