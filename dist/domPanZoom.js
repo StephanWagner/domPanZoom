@@ -4,12 +4,10 @@ function domPanZoomWrapper() {
   var domPanZoom = function (options) {
     // Default options, pass a custom options object when initializing domPanZoom to override
     var defaultOptions = {
-      // The ID of the wrapper element
-      wrapperElementID: '',
-
-      // The ID of the element that will be zoomed
-      // This element should be directly within the wrapper element
-      panZoomElementID: '',
+      // The wrapper and container element
+      // You can use an element object or a selector string
+      wrapperElement: null,
+      panZoomElement: null,
 
       // Start with a centered position
       // This option overrides options initalPanX and initialPanY
@@ -38,6 +36,8 @@ function domPanZoomWrapper() {
       zoomSpeedPinch: 4,
 
       // Initial zoom
+      // TODO Use 'cover' or 'contain' to fit the panZoomElement bounds to the wrapperElement
+      // TODO Also have an example
       initialZoom: 1,
 
       // Initial pan in percent
@@ -294,7 +294,7 @@ function domPanZoomWrapper() {
         this.adjustPositionByZoom(nextZoom, offsetToCenter.x, offsetToCenter.y);
 
         // TODO calculate both finger movement and pan here, remember to fire pan event too event
-        // TODOcheck fireing events
+        // TODO check fireing events
 
         this.zoom = nextZoom;
         this.setPosition(true);
@@ -650,23 +650,31 @@ function domPanZoomWrapper() {
       return this.wrapperElement;
     }
 
-    // Abort if no ID provided
-    if (!this.options.wrapperElementID) {
-      console.error('wrapperElementID is a required option');
+    // Abort if option is empty
+    if (!this.options.wrapperElement) {
+      console.error('The option wrapperElement is required');
       return null;
     }
 
-    // Find the element
-    var wrapperElement = document.querySelector(
-      '#' + this.options.wrapperElementID
-    );
-
-    // Cache element
-    if (wrapperElement) {
-      this.wrapperElement = wrapperElement;
-      return wrapperElement;
+    // Find the element if selector provided
+    if (typeof this.options.wrapperElement === 'string') {
+      this.options.wrapperElement = document.querySelector(
+        this.options.wrapperElement
+      );
     }
 
+    // Cache element if valid
+    if (
+      this.options.wrapperElement &&
+      this.options.wrapperElement instanceof Element
+    ) {
+      this.wrapperElement = this.options.wrapperElement;
+      return this.options.wrapperElement;
+    }
+
+    console.error(
+      'The option wrapperElement needs to be a valid selector string or an instance of Element'
+    );
     return null;
   };
 
@@ -677,23 +685,31 @@ function domPanZoomWrapper() {
       return this.containerElement;
     }
 
-    // Abort if no ID provided
-    if (!this.options.panZoomElementID) {
-      console.error('panZoomElementID is a required option');
+    // Abort if option is empty
+    if (!this.options.panZoomElement) {
+      console.error('The option panZoomElement is required');
       return null;
     }
 
-    // Find the element
-    var containerElement = document.querySelector(
-      '#' + this.options.panZoomElementID
-    );
-
-    // Cache element
-    if (containerElement) {
-      this.containerElement = containerElement;
-      return containerElement;
+    // Find the element if selector provided
+    if (typeof this.options.panZoomElement === 'string') {
+      this.options.panZoomElement = document.querySelector(
+        this.options.panZoomElement
+      );
     }
 
+    // Cache element if valid
+    if (
+      this.options.panZoomElement &&
+      this.options.panZoomElement instanceof Element
+    ) {
+      this.containerElement = this.options.panZoomElement;
+      return this.options.panZoomElement;
+    }
+
+    console.error(
+      'The option panZoomElement needs to be a valid selector string or an instance of Element'
+    );
     return null;
   };
 
