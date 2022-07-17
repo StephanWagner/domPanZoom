@@ -26,7 +26,8 @@ import domPanZoom from 'dompanzoom';
 
 ## Usage
 
-You need two HTML DOM elements. The panZoom element within a wrapper element:
+You need two HTML DOM elements.\
+The panZoom element within a wrapper element:
 
 ```html
 <div id="my-wrapper">
@@ -40,13 +41,13 @@ Then create a new instance of domPanZoom:
 
 ```javascript
 new domPanZoom({
-  // The ID of the wrapper element (required)
-  wrapperElementID: 'my-wrapper',
-
-  // The ID of the container element (required)
-  panZoomElementID: 'my-container'
+  wrapperElement: '#my-wrapper',
+  panZoomElement: '#my-container'
 });
 ```
+
+The options `wrapperElement` and `panZoomElement` are required.\
+You can use any query selector or the actual DOM element instance.
 
 ---
 
@@ -72,8 +73,8 @@ You can pass the following options into domPanZoom:
 
 ```javascript
 new domPanZoom({
-  wrapperElementID: 'my-wrapper',
-  panZoomElementID: 'my-container',
+  wrapperElement: '#my-wrapper',
+  panZoomElement: '#my-container',
   bounds: false,
   minZoom: 1
 });
@@ -104,8 +105,8 @@ You can use the following methods:
 
 ```javascript
 var myDomPanZoom = new domPanZoom({
-  wrapperElementID: 'my-wrapper',
-  panZoomElementID: 'my-container'
+  wrapperElement: '#my-wrapper',
+  panZoomElement: '#my-container'
 });
 
 myDomPanZoom.panTo(20, 80);
@@ -118,19 +119,18 @@ myDomPanZoom.panTo(20, 80);
 | Event |  |
 | --- | --- |
 | `onInit` | Triggered once domPanZoom is initialized |
-| `onChange` | Triggered while panning or zooming |
-| `onZoom` | Triggered while zooming |
-| `onPan` | Triggered while panning |
+| `onChange` | Triggered when panning or zooming |
+| `onZoom` | Triggered when zooming |
+| `onPan` | Triggered when panning |
 
 ### E.g.
 
 ```javascript
 var myDomPanZoom = new domPanZoom({
-  wrapperElementID: 'my-wrapper',
-  panZoomElementID: 'my-container',
-
-  onZoom: function () {
-    console.log(this.getZoom());
+  wrapperElement: '#my-wrapper',
+  panZoomElement: '#my-container'
+  onZoom: function (position) {
+    console.log(position);
   }
 });
 ```

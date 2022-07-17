@@ -107,6 +107,12 @@
 
               document.getElementById('prototype__pan-y-percent').innerHTML =
                 this.getPanY();
+            },
+            onPan: function (position) {
+              console.log('Panning...', position);
+            },
+            onZoom: function (position) {
+              console.log('Zooming...', position);
             }
           });
         </script>
