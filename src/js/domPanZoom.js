@@ -12,7 +12,7 @@ function domPanZoomWrapper() {
       // This option overrides options initalPanX and initialPanY
       center: true,
 
-      // Setting this option to 'contain' or 'cover' limits the boundries of the panZoomElement to the wrapperElement
+      // Setting the option bounds to 'contain' or 'cover' limits the boundries of the panZoomElement to the wrapperElement
       // This works similar to the CSS property 'background-size: contain / cover'
       // Disable bound by setting this option to 'false'
       // This option might effect the option minZoom
@@ -31,7 +31,7 @@ function domPanZoomWrapper() {
       // The speed in which to zoom when using mouse wheel
       zoomSpeedWheel: 1,
 
-      // The speed in which to zoom when pinching
+      // The speed in which to zoom when pinching with touch gestures
       zoomSpeedPinch: 4,
 
       // Initial zoom
@@ -48,6 +48,7 @@ function domPanZoomWrapper() {
       transitionSpeed: 400,
 
       // Events
+      // TODO test
       onInit: null,
       onChange: null,
       onZoom: null,
@@ -73,7 +74,7 @@ function domPanZoomWrapper() {
 
     // Cache
     this.evCache = [];
-    this.prevDiff = -1;
+    this.curDiffCache = 0;
 
     // Attach events
     this.attachEvents();
@@ -209,23 +210,22 @@ function domPanZoomWrapper() {
       // Speed
       var speed = this.options.zoomSpeedWheel;
 
-      // Adjust speed (copied from https://github.com/anvaka/panzoom/blob/master/index.js#L884)
+      // Adjust speed (https://github.com/anvaka/panzoom/blob/master/index.js#L884)
       var sign = Math.sign(delta);
       var deltaAdjustedSpeed = Math.min(0.25, Math.abs((speed * delta) / 128));
       deltaAdjustedSpeed = 1 - sign * deltaAdjustedSpeed;
       var nextZoom = this.sanitizeZoom(this.zoom * deltaAdjustedSpeed);
 
-      // Get offset from center, then adjust
+      // Get offset to center, then adjust
       var offsetToCenter = this.getEventOffsetToCenter(ev);
-
-      document.getElementById('prototype__cx').innerHTML = offsetToCenter.x;
-      document.getElementById('prototype__cy').innerHTML = offsetToCenter.y;
-
       this.adjustPositionByZoom(nextZoom, offsetToCenter.x, offsetToCenter.y);
 
-      // Set new zoom
+      // Update position
       this.zoom = nextZoom;
       this.setPosition(true);
+
+      // Trigger event
+      this.fireEvent('onZoom', this.getPosition());
     }.bind(this);
 
     this.getWrapper().addEventListener('wheel', mouseWheelEvent, {
@@ -257,25 +257,22 @@ function domPanZoomWrapper() {
         }
       }
 
+      // Proceed if two touch gestures detected
       if (this.evCache.length == 2) {
-        var container = this.getContainer();
-
-        // TODO function
+        // Calculate distance between fingers
         var curDiff = this.getTouchEventsDistance(
           this.evCache[0],
           this.evCache[1]
         );
         curDiff -= this.curDiffCache;
 
-        var curDiffPercent = curDiff / container.clientWidth;
-
+        var curDiffPercent = curDiff / this.getContainer().clientWidth;
         curDiffPercent *= this.options.zoomSpeedPinch;
         curDiffPercent += 1;
 
-        document.getElementById('prototype__curdiff').innerHTML = curDiff;
-
         var nextZoom = this.sanitizeZoom(this.zoomCache * curDiffPercent);
 
+        // Get offset to center, then adjust
         var touchEventsCenter = this.getTouchEventsCenter(
           this.evCache[0],
           this.evCache[1]
@@ -286,19 +283,17 @@ function domPanZoomWrapper() {
           clientX: touchEventsCenter.clientX,
           clientY: touchEventsCenter.clientY
         });
-
-        document.getElementById('prototype__cx').innerHTML = offsetToCenter.x;
-        document.getElementById('prototype__cy').innerHTML = offsetToCenter.y;
-
         this.adjustPositionByZoom(nextZoom, offsetToCenter.x, offsetToCenter.y);
 
-        // TODO calculate both finger movement and pan here, remember to fire pan event too event
+        // TODO calculate both finger movement and pan here
         // TODO check fireing events
 
+        // Update position
         this.zoom = nextZoom;
         this.setPosition(true);
 
-        this.prevDiff = curDiff;
+        // Trigger event
+        this.fireEvent('onZoom', this.getPosition());
       }
     }.bind(this);
 
@@ -315,18 +310,11 @@ function domPanZoomWrapper() {
       }
 
       if (this.evCache.length < 2) {
-        this.prevDiff = -1;
         this.blockPan = false;
       }
     }.bind(this);
 
-    var pointerUpEvents = [
-      'pointerup',
-      'pointercancel',
-      'pointerout',
-      'pointerleave'
-    ];
-    pointerUpEvents.forEach(
+    ['pointerup', 'pointercancel', 'pointerout', 'pointerleave'].forEach(
       function (event) {
         this.getWrapper().addEventListener(event, pointerUpEvent, {
           passive: false
@@ -362,11 +350,18 @@ function domPanZoomWrapper() {
     var centerX = diffX * 0.5;
     var centerY = diffY * 0.5;
 
-    var offsetToParent = this.getEventOffsetToParent(ev);
     var offsetToCenter = {
-      x: (wrapper.clientWidth / 2 - offsetToParent.x - window.scrollX) * -1,
-      y: (wrapper.clientHeight / 2 - offsetToParent.y - window.scrollY) * -1
+      x: 0,
+      y: 0
     };
+
+    if (ev) {
+      var offsetToParent = this.getEventOffsetToParent(ev);
+      offsetToCenter.x =
+        (wrapper.clientWidth / 2 - offsetToParent.x - window.scrollX) * -1;
+      offsetToCenter.y =
+        (wrapper.clientHeight / 2 - offsetToParent.y - window.scrollY) * -1;
+    }
 
     var offsetX = this.x - centerX - offsetToCenter.x;
     var offsetY = this.y - centerY - offsetToCenter.y;
@@ -480,16 +475,9 @@ function domPanZoomWrapper() {
     // Sanitize zoom
     zoom = this.sanitizeZoom(zoom);
 
-    // Get offset from center, then adjust
-    var wrapper = this.getWrapper();
-    var container = this.getContainer();
-    var diffX = wrapper.clientWidth - container.clientWidth;
-    var diffY = wrapper.clientHeight - container.clientHeight;
-    var centerX = diffX * 0.5;
-    var centerY = diffY * 0.5;
-    var offsetX = this.x - centerX;
-    var offsetY = this.y - centerY;
-    this.adjustPositionByZoom(zoom, offsetX, offsetY);
+    // Get offset to center, then adjust
+    var offsetToCenter = this.getEventOffsetToCenter();
+    this.adjustPositionByZoom(zoom, offsetToCenter.x, offsetToCenter.y);
 
     // Set new zoom
     this.zoom = zoom;
@@ -526,11 +514,8 @@ function domPanZoomWrapper() {
     }
     var nextZoom = currentZoom * zoomStep;
 
-    // Set zoom
+    // Update zoom
     this.zoomTo(nextZoom, instant);
-
-    // Trigger event
-    this.fireEvent('onZoom', this.getPosition());
   };
 
   // Adjust position when zooming
@@ -604,7 +589,12 @@ function domPanZoomWrapper() {
 
     this.x = panX;
     this.y = panY;
+
+    // Update position
     this.setPosition(instant);
+
+    // Trigger event
+    this.fireEvent('onPan', this.getPosition());
   };
 
   domPanZoom.prototype.panLeft = function (step, instant) {
@@ -639,7 +629,11 @@ function domPanZoomWrapper() {
     direction === 'up' && (this.y += panHeight * -1);
     direction === 'down' && (this.y += panHeight);
 
+    // Update position
     this.setPosition(instant);
+
+    // Trigger event
+    this.fireEvent('onPan', this.getPosition());
   };
 
   // Get the wrapper element
@@ -721,153 +715,3 @@ function domPanZoomWrapper() {
 
   return domPanZoom;
 }
-
-//       var containerElement = document.querySelector('#prototype__container');
-
-//       containerElement.addEventListener('mousedown', function (ev) {
-//         ev.preventDefault();
-//         console.log('0');
-//           containerElement.addEventListener('mousemove', theEvent, { passive: true });
-//       });
-
-//       document.addEventListener('mouseup', function () {
-//         console.log('1');
-//           containerElement.removeEventListener('mousemove', theEvent, { passive: true });
-//       });
-
-// view.addEventListener('mousedown', tap);
-// view.addEventListener('mousemove', drag);
-// view.addEventListener('mouseup', release);
-
-// function kinetic(getPoint, scroll, settings) {
-//   if (typeof settings !== 'object') {
-//     // setting could come as boolean, we should ignore it, and use an object.
-//     settings = {};
-//   }
-
-//   var minVelocity =
-//     typeof settings.minVelocity === 'number' ? settings.minVelocity : 5;
-//   var amplitude =
-//     typeof settings.amplitude === 'number' ? settings.amplitude : 0.25;
-//   var cancelAnimationFrame =
-//     typeof settings.cancelAnimationFrame === 'function'
-//       ? settings.cancelAnimationFrame
-//       : cancelAnimationFrame();
-//   var requestAnimationFrame =
-//     typeof settings.requestAnimationFrame === 'function'
-//       ? settings.requestAnimationFrame
-//       : requestAnimationFrame();
-
-//   var lastPoint;
-//   var timestamp;
-//   var timeConstant = 342;
-
-//   var ticker;
-//   var vx, targetX, ax;
-//   var vy, targetY, ay;
-
-//   var raf;
-
-//   return {
-//     start: start,
-//     stop: stop,
-//     cancel: dispose
-//   };
-
-//   function dispose() {
-//     cancelAnimationFrame(ticker);
-//     cancelAnimationFrame(raf);
-//   }
-
-//   function start() {
-//     lastPoint = getPoint();
-
-//     ax = ay = vx = vy = 0;
-//     timestamp = new Date();
-
-//     cancelAnimationFrame(ticker);
-//     cancelAnimationFrame(raf);
-
-//     // we start polling the point position to accumulate velocity
-//     // Once we stop(), we will use accumulated velocity to keep scrolling
-//     // an object.
-//     ticker = requestAnimationFrame(track);
-//   }
-
-//   function track() {
-//     var now = Date.now();
-//     var elapsed = now - timestamp;
-//     timestamp = now;
-
-//     var currentPoint = getPoint();
-
-//     var dx = currentPoint.x - lastPoint.x;
-//     var dy = currentPoint.y - lastPoint.y;
-
-//     lastPoint = currentPoint;
-
-//     var dt = 1000 / (1 + elapsed);
-
-//     // moving average
-//     vx = 0.8 * dx * dt + 0.2 * vx;
-//     vy = 0.8 * dy * dt + 0.2 * vy;
-
-//     ticker = requestAnimationFrame(track);
-//   }
-
-//   function stop() {
-//     cancelAnimationFrame(ticker);
-//     cancelAnimationFrame(raf);
-
-//     var currentPoint = getPoint();
-
-//     targetX = currentPoint.x;
-//     targetY = currentPoint.y;
-//     timestamp = Date.now();
-
-//     if (vx < -minVelocity || vx > minVelocity) {
-//       ax = amplitude * vx;
-//       targetX += ax;
-//     }
-
-//     if (vy < -minVelocity || vy > minVelocity) {
-//       ay = amplitude * vy;
-//       targetY += ay;
-//     }
-
-//     raf = requestAnimationFrame(autoScroll);
-//   }
-
-//   function autoScroll() {
-//     var elapsed = Date.now() - timestamp;
-
-//     var moving = false;
-//     var dx = 0;
-//     var dy = 0;
-
-//     if (ax) {
-//       dx = -ax * Math.exp(-elapsed / timeConstant);
-
-//       if (dx > 0.5 || dx < -0.5) {
-//         moving = true;
-//       } else {
-//          dx = ax = 0;
-//       }
-//     }
-
-//     if (ay) {
-//       dy = -ay * Math.exp(-elapsed / timeConstant);
-
-//       if (dy > 0.5 || dy < -0.5) {
-//         moving = true;
-//       } else {
-//         dy = ay = 0;
-//       }
-//     }
-
-//     if (moving) {
-//       scroll(targetX + dx, targetY + dy);
-//       raf = requestAnimationFrame(autoScroll);
-//     }
-//   }
-// }
