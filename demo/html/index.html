@@ -6,13 +6,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link href="./demo.css" rel="stylesheet" />
-    <script src="../../dist/domPanZoom.js?v=1"></script>
+    <link href="../../assets/demo/styles.css?v=0.0.5" rel="stylesheet" />
+    <script src="../../dist/domPanZoom.js?v=0.0.5"></script>
   </head>
 
   <body>
-
     <div class="demo__wrapper">
+
+      <div class="demo__header">
+        <h1>domPanZoom</h1>
+        <h2>HTML demos</h2>
+      </div>
+
       <!-- Demo image -->
 
       <div class="demo__container">
@@ -30,8 +35,11 @@
         <div>Pan X (percent): <span id="prototype__pan-x-percent"></span></div>
         <div>Pan Y (percent): <span id="prototype__pan-y-percent"></span></div>
 
-        <div id="prototype__wrapper">
-          <img id="prototype__container" src="SAM_2726-E.JPG" />
+        <div class="dompanzoom__wrapper -demo1">
+          <div class="dompanzoom__container -demo1">
+            <img class="dompanzoom__image" src="../../assets/demo/img/img1.jpg" alt="" />
+            <img class="dompanzoom__image-overlay" src="../../assets/demo/img/img-overlay.png" alt="" />
+          </div>
         </div>
 
         <div style="text-align: center">
@@ -75,54 +83,19 @@
         </div>
 
         <style>
-          #prototype__wrapper {
-            width: 500px;
-            height: 350px;
-            margin: 50px auto;
-            border: 2px solid red;
-            position: relative;
-          }
 
-          #prototype__wrapper:before,
-          #prototype__wrapper:after {
-            content: '';
-            position: absolute;
-            z-index: 200;
-            background: rgba(255, 0, 0, 0.75);
-          }
-
-          #prototype__wrapper:before {
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            transform: translateY(-50%);
-          }
-
-          #prototype__wrapper:after {
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 1px;
-            transform: translateX(-50%);
-          }
-
-          #prototype__container {
-            width: 800px;
-            height: 400px;
-          }
         </style>
 
         <script>
           var myPanZoom = new domPanZoom({
-            wrapperElementID: 'prototype__wrapper',
-            panZoomElementID: 'prototype__container',
+            wrapperElement: '.dompanzoom__wrapper.-demo1',
+            panZoomElement: '.dompanzoom__container.-demo1',
 
             bounds: false,
             center: true,
 
-            initialPanX: 0,
-            initialPanY: 0,
+            // initialPanX: 0,
+            // initialPanY: 0,
 
             onChange: function () {
               document.getElementById('prototype__zoom').innerHTML =

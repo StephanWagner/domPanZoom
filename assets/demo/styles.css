@@ -1,0 +1,133 @@
+/* Fonts */
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('./fonts/webfonts/SourceSansPro/SourceSansPro-Regular.woff2') format('woff2'),
+    url('./fonts/webfonts/SourceSansPro/SourceSansPro-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('./fonts/webfonts/SourceSansPro/SourceSansPro-Bold.woff2') format('woff2'),
+    url('./fonts/webfonts/SourceSansPro/SourceSansPro-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('./fonts/webfonts/Nunito/Nunito-Regular.woff2') format('woff2'),
+    url('./fonts/webfonts/Nunito/Nunito-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('./fonts/webfonts/Nunito/Nunito-Bold.woff2') format('woff2'),
+    url('./fonts/webfonts/Nunito/Nunito-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: block;
+}
+
+/* Scaffold */
+
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  color: #222;
+  font-size: 16px;
+  line-height: 1.6;
+  background: #fff;
+  margin: 0;
+  padding: 0;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Header */
+
+.demo__header {
+  padding: 32px 0;
+  background: linear-gradient(45deg, #3d4966, #596580);
+}
+
+.demo__header h1,
+.demo__header h2 {
+  color: #fff;
+  text-align: center;
+  font-family: 'Nunito', sans-serif;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.demo__header h1 {
+  font-size: 46px;
+  margin: 0 0 24px;
+}
+
+.demo__header h2 {
+  font-size: 32px;
+  margin: 0;
+}
+
+/* domPanXoom elements */
+
+.dompanzoom__wrapper {
+  width: 50%;
+  height: 350px;
+  margin: 50px auto;
+  border: 2px solid #000;
+  position: relative;
+}
+
+.dompanzoom__wrapper:before,
+.dompanzoom__wrapper:after {
+  content: '';
+  position: absolute;
+  z-index: 200;
+  background: #000;
+}
+
+.dompanzoom__wrapper:before {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.dompanzoom__wrapper:after {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+.dompanzoom__container {
+  position: relative;
+}
+
+.dompanzoom__image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Demo 1 */
+
+.dompanzoom__container.-demo1,
+.dompanzoom__image.-demo1,
+.dompanzoom__image-overlay.-demo1 {
+  display: block;
+  width: 3840px;
+  height: 2560px;
+}
