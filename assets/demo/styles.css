@@ -78,14 +78,15 @@ body {
   margin: 0;
 }
 
-/* domPanXoom elements */
+/* domPanZoom elements */
 
 .dompanzoom__wrapper {
-  width: 50%;
-  height: 350px;
+  position: relative;
+  background: #eee;
+  width: 600px;
+  height: 340px;
   margin: 50px auto;
   border: 2px solid #000;
-  position: relative;
 }
 
 .dompanzoom__wrapper:before,
