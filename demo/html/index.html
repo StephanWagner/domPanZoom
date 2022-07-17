@@ -4,7 +4,7 @@
     <title>domPanZoom HTML demos</title>
 
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=672, initial-scale=1" />
+    <meta name="viewport" content="width=672" />
 
     <link href="../../assets/demo/styles.css?v=0.0.5" rel="stylesheet" />
     <script src="../../dist/domPanZoom.js?v=0.0.5"></script>
@@ -55,7 +55,9 @@
         <div class="dompanzoom__controls-wrapper">
           <div class="dompanzoom__controls-container">
             <label>Reset</label>
-            <button onclick="myPanZoom.zoomTo(1).center()">Centered with Zoom 1</button>
+            <button onclick="myPanZoom.zoomTo(1).center()">
+              Centered with zoom 1
+            </button>
           </div>
         </div>
 
@@ -81,7 +83,9 @@
             <button onclick="myPanZoom.zoomOut()">out</button>
             <button onclick="myPanZoom.zoomIn(100)">in (100%)</button>
             <button onclick="myPanZoom.zoomOut(50)">out (50%)</button>
-            <button onclick="myPanZoom.zoomOut(75, true)">out (75% instant)</button>
+            <button onclick="myPanZoom.zoomOut(75, true)">
+              out (75% instant)
+            </button>
           </div>
         </div>
 
@@ -93,7 +97,9 @@
             <button onclick="myPanZoom.panTo(10, 10)">10 10</button>
             <button onclick="myPanZoom.panTo(50, 0)">50 0</button>
             <button onclick="myPanZoom.panTo(0, 100)">0 100</button>
-            <button onclick="myPanZoom.panTo(100, 100, true)">100 100 (instant)</button>
+            <button onclick="myPanZoom.panTo(100, 100, true)">
+              100 100 (instant)
+            </button>
           </div>
         </div>
 
@@ -105,7 +111,9 @@
             <button onclick="myPanZoom.panUp()">up</button>
             <button onclick="myPanZoom.panDown()">down</button>
             <button onclick="myPanZoom.panLeft(true)">left (instant)</button>
-            <button onclick="myPanZoom.panRight(100, true)">right (100% instant)</button>
+            <button onclick="myPanZoom.panRight(100, true)">
+              right (100% instant)
+            </button>
           </div>
         </div>
 
@@ -137,9 +145,11 @@
               ).innerHTML = this.getPanY(true).toFixed(0) + 'px';
             },
             onPan: function (position) {
+              // TODO show event triggers
               console.log('Panning...', position);
             },
             onZoom: function (position) {
+              // TODO show event triggers
               console.log('Zooming...', position);
             }
           });
