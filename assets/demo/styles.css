@@ -52,6 +52,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 /* Header */
 
 .demo__header {
@@ -78,14 +85,86 @@ body {
   margin: 0;
 }
 
+/* Demo container */
+
+.demo__container {
+  background: #ddd;
+  padding: 48px 0;
+}
+
+/* Infos */
+
+.dompanzoom__infos-container {
+  width: 656px;
+  margin: 16px auto;
+  display: flex;
+}
+
+.dompanzoom__info {
+  font-family: monospace;
+  font-size: 14px;
+  margin: 0 8px;
+  background: #fff;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 16px;
+  padding: 0 12px;
+  width: calc(33.333% - 16px);
+}
+
+/* Controls */
+
+.dompanzoom__controls-container {
+  width: 640px;
+  background: #fff;
+  height: 32px;
+  padding: 4px;
+  display: flex;
+  border-radius: 16px;
+  margin: 0 auto 8px;
+}
+
+.dompanzoom__controls-container label,
+.dompanzoom__controls-container button {
+  margin: 0 8px 8px 0;
+  box-shadow: none;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 12px;
+  padding: 0 12px;
+  font-size: 14px;
+  border: 0;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.dompanzoom__controls-container label {
+  flex-shrink: 0;
+  width: 70px;
+  padding: 0 8px;
+  color: #666;
+}
+
+.dompanzoom__controls-container button {
+  padding: 0 12px;
+  background: #596580;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 250ms;
+}
+
+.dompanzoom__controls-container button:hover {
+  background: #3d4966;
+}
+
 /* domPanZoom elements */
 
 .dompanzoom__wrapper {
   position: relative;
-  background: #eee;
-  width: 600px;
-  height: 340px;
-  margin: 50px auto;
+  background: #fff;
+  width: 640px;
+  height: 480px;
+  margin: auto;
   border: 2px solid #000;
 }
 
@@ -125,9 +204,9 @@ body {
 
 /* Demo 1 */
 
-.dompanzoom__container.-demo1,
-.dompanzoom__image.-demo1,
-.dompanzoom__image-overlay.-demo1 {
+.demo__container.-demo1 .dompanzoom__container,
+.demo__container.-demo1 .dompanzoom__image,
+.demo__container.-demo1 .dompanzoom__image-overlay {
   display: block;
   width: 3840px;
   height: 2560px;

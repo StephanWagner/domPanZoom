@@ -4,7 +4,7 @@
     <title>domPanZoom HTML demos</title>
 
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=672, initial-scale=1" />
 
     <link href="../../assets/demo/styles.css?v=0.0.5" rel="stylesheet" />
     <script src="../../dist/domPanZoom.js?v=0.0.5"></script>
@@ -12,7 +12,6 @@
 
   <body>
     <div class="demo__wrapper">
-
       <div class="demo__header">
         <h1>domPanZoom</h1>
         <h2>HTML demos</h2>
@@ -20,93 +19,122 @@
 
       <!-- Demo image -->
 
-      <div class="demo__container">
-        <br />
-        <h2>Image</h2>
-
-        <div>Zoom: <span id="prototype__zoom"></span></div>
-        <div>Pan X: <span id="prototype__pan-x"></span></div>
-        <div>Pan Y: <span id="prototype__pan-y"></span></div>
-        <div>Pan X (percent): <span id="prototype__pan-x-percent"></span></div>
-        <div>Pan Y (percent): <span id="prototype__pan-y-percent"></span></div>
-
-        <div class="dompanzoom__wrapper -demo1">
-          <div class="dompanzoom__container -demo1">
-            <img class="dompanzoom__image" src="../../assets/demo/img/img1.jpg" alt="" />
-            <img class="dompanzoom__image-overlay" src="../../assets/demo/img/img-overlay.png" alt="" />
+      <div class="demo__container -demo1">
+        <div class="dompanzoom__wrapper">
+          <div class="dompanzoom__container">
+            <img
+              class="dompanzoom__image"
+              src="../../assets/demo/img/img1.jpg"
+              alt=""
+            />
+            <img
+              class="dompanzoom__image-overlay"
+              src="../../assets/demo/img/img-overlay.png"
+              alt=""
+            />
           </div>
         </div>
 
-        <div style="text-align: center">
-          <button onclick="myPanZoom.zoomTo(1)">Zoom to 1</button>
-          <button onclick="myPanZoom.zoomTo(2)">Zoom to 2</button>
-          <button onclick="myPanZoom.zoomTo(3)">Zoom to 3</button>
-          <button onclick="myPanZoom.zoomTo(3.4567)">Zoom to 3.4567</button>
-          <button onclick="myPanZoom.zoomTo(4)">Zoom to 4</button>
-          <button onclick="myPanZoom.zoomTo(5)">Zoom to 5</button>
-          <button onclick="myPanZoom.zoomTo(20)">Zoom to 20</button>
-          <button onclick="myPanZoom.zoomTo(0.5)">Zoom to 0.5</button>
-          <button onclick="myPanZoom.zoomTo(-1)">Zoom to -1</button>
-          <br />
-          <button onclick="myPanZoom.zoomIn()">Zoom in</button>
-          <button onclick="myPanZoom.zoomIn(100)">Zoom in by 100%</button>
-          <button onclick="myPanZoom.zoomOut()">Zoom out</button>
-          <br />
-          <br />
-
-          <button onclick="myPanZoom.center()">Set center</button>
-          <br />
-
-          <button onclick="myPanZoom.panLeft()">panLeft</button>
-          <button onclick="myPanZoom.panRight()">panRight</button>
-          <button onclick="myPanZoom.panUp()">panUp</button>
-          <button onclick="myPanZoom.panUp(true)">panUp (instant)</button>
-          <button onclick="myPanZoom.panDown()">panDown</button>
-          <button onclick="myPanZoom.panRight(200)">Pan Right 200%</button>
-          <br />
-          <button onclick="myPanZoom.panTo(0, 0)">panTo 0 0</button>
-          <button onclick="myPanZoom.panTo(10, 10)">panTo 10 10</button>
-          <button onclick="myPanZoom.panTo(90, 90)">panTo 90 90</button>
-          <button onclick="myPanZoom.panTo(25, 25)">panTo 25 25</button>
-          <button onclick="myPanZoom.panTo(50, 0)">panTo 50 0</button>
-          <button onclick="myPanZoom.panTo(100, 0)">panTo 100 0</button>
-          <button onclick="myPanZoom.panTo(90, 55)">panTo 90 55</button>
-          <button onclick="myPanZoom.panTo(0, 0, true)">
-            panTo 0 0 (instant)
-          </button>
-          <button onclick="myPanZoom.panTo(100, 100)">panTo 100 100</button>
+        <div class="dompanzoom__infos-container">
+          <div class="dompanzoom__info -zoom">
+            <b>Zoom</b>
+            <span class="dompanzoom__value"></span>
+          </div>
+          <div class="dompanzoom__info -pan-x">
+            <b>PanX</b>
+            <span class="dompanzoom__value -percent"></span>
+            <span class="dompanzoom__value -pixel"></span>
+          </div>
+          <div class="dompanzoom__info -pan-y">
+            <b>PanY</b>
+            <span class="dompanzoom__value -percent"></span>
+            <span class="dompanzoom__value -pixel"></span>
+          </div>
         </div>
 
-        <style>
+        <div class="dompanzoom__controls-wrapper">
+          <div class="dompanzoom__controls-container">
+            <label>Reset</label>
+            <button onclick="myPanZoom.zoomTo(1).center()">Centered with Zoom 1</button>
+          </div>
+        </div>
 
-        </style>
+        <div class="dompanzoom__controls-wrapper">
+          <div class="dompanzoom__controls-container">
+            <label>Zoom to</label>
+            <button onclick="myPanZoom.zoomTo(1)">1</button>
+            <button onclick="myPanZoom.zoomTo(2)">2</button>
+            <button onclick="myPanZoom.zoomTo(4.5)">4.5</button>
+            <button onclick="myPanZoom.zoomTo(8, true)">8 (instant)</button>
+            <button onclick="myPanZoom.zoomTo(0.5)">0.5</button>
+            <button onclick="myPanZoom.zoomTo(-1)">-1</button>
+            <button onclick="myPanZoom.zoomTo(20)">20</button>
+            <button onclick="myPanZoom.zoomTo('contain')">contain</button>
+            <button onclick="myPanZoom.zoomTo('cover')">cover</button>
+          </div>
+        </div>
+
+        <div class="dompanzoom__controls-wrapper">
+          <div class="dompanzoom__controls-container">
+            <label>Zoom</label>
+            <button onclick="myPanZoom.zoomIn()">in</button>
+            <button onclick="myPanZoom.zoomOut()">out</button>
+            <button onclick="myPanZoom.zoomIn(100)">in (100%)</button>
+            <button onclick="myPanZoom.zoomOut(50)">out (50%)</button>
+            <button onclick="myPanZoom.zoomOut(75, true)">out (75% instant)</button>
+          </div>
+        </div>
+
+        <div class="dompanzoom__controls-wrapper">
+          <div class="dompanzoom__controls-container">
+            <label>Pan to</label>
+            <button onclick="myPanZoom.center()">center</button>
+            <button onclick="myPanZoom.panTo(0, 0)">0 0</button>
+            <button onclick="myPanZoom.panTo(10, 10)">10 10</button>
+            <button onclick="myPanZoom.panTo(50, 0)">50 0</button>
+            <button onclick="myPanZoom.panTo(0, 100)">0 100</button>
+            <button onclick="myPanZoom.panTo(100, 100, true)">100 100 (instant)</button>
+          </div>
+        </div>
+
+        <div class="dompanzoom__controls-wrapper">
+          <div class="dompanzoom__controls-container">
+            <label>Pan</label>
+            <button onclick="myPanZoom.panLeft()">left</button>
+            <button onclick="myPanZoom.panRight()">right</button>
+            <button onclick="myPanZoom.panUp()">up</button>
+            <button onclick="myPanZoom.panDown()">down</button>
+            <button onclick="myPanZoom.panLeft(true)">left (instant)</button>
+            <button onclick="myPanZoom.panRight(100, true)">right (100% instant)</button>
+          </div>
+        </div>
 
         <script>
           var myPanZoom = new domPanZoom({
-            wrapperElement: '.dompanzoom__wrapper.-demo1',
-            panZoomElement: '.dompanzoom__container.-demo1',
-
+            wrapperElement: '.demo__container.-demo1 .dompanzoom__wrapper',
+            panZoomElement: '.demo__container.-demo1 .dompanzoom__container',
             bounds: false,
             center: true,
-
-            // initialPanX: 0,
-            // initialPanY: 0,
-
             onChange: function () {
-              document.getElementById('prototype__zoom').innerHTML =
-                this.getZoom();
+              document.querySelector(
+                '.demo__container.-demo1 .dompanzoom__info.-zoom span'
+              ).innerHTML = this.getZoom().toFixed(2);
 
-              document.getElementById('prototype__pan-x').innerHTML =
-                this.getPanX(true);
+              document.querySelector(
+                '.demo__container.-demo1 .dompanzoom__info.-pan-x .dompanzoom__value.-percent'
+              ).innerHTML = this.getPanX().toFixed(0) + '%';
 
-              document.getElementById('prototype__pan-y').innerHTML =
-                this.getPanY(true);
+              document.querySelector(
+                '.demo__container.-demo1 .dompanzoom__info.-pan-y .dompanzoom__value.-percent'
+              ).innerHTML = this.getPanY().toFixed(0) + '%';
 
-              document.getElementById('prototype__pan-x-percent').innerHTML =
-                this.getPanX();
+              document.querySelector(
+                '.demo__container.-demo1 .dompanzoom__info.-pan-x .dompanzoom__value.-pixel'
+              ).innerHTML = this.getPanX(true).toFixed(0) + 'px';
 
-              document.getElementById('prototype__pan-y-percent').innerHTML =
-                this.getPanY();
+              document.querySelector(
+                '.demo__container.-demo1 .dompanzoom__info.-pan-y .dompanzoom__value.-pixel'
+              ).innerHTML = this.getPanY(true).toFixed(0) + 'px';
             },
             onPan: function (position) {
               console.log('Panning...', position);
