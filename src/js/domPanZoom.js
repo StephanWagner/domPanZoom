@@ -16,7 +16,7 @@ function domPanZoomWrapper() {
       // This works similar to the CSS property 'background-size: contain / cover'
       // Disable bound by setting this option to 'false'
       // This option might effect the option minZoom
-      bounds: 'cover',
+      bounds: 'contain',
 
       // Minimum and maximum zoom
       minZoom: 0.1,
@@ -35,9 +35,9 @@ function domPanZoomWrapper() {
       zoomSpeedPinch: 4,
 
       // Initial zoom
-      // TODO Use 'cover' or 'contain' to fit the panZoomElement bounds to the wrapperElement
-      // TODO Also have an example
-      initialZoom: 1,
+      // Use any zoom value between the options minZoom and maxZoom
+      // Use 'cover' or 'contain' to limit the panZoomElement bounds to the wrapperElement
+      initialZoom: 'contain',
 
       // Initial pan in percent
       // The option 'center' has to be 'false' for initial panning to work
@@ -91,7 +91,7 @@ function domPanZoomWrapper() {
       var minZoomX = maxWidth / panZoomWidth;
       var minZoomY = maxHeight / panZoomHeight;
 
-      if (this.options.bounds === 'cover') {
+      if (this.options.bounds == 'cover') {
         this.options.minZoom = Math.max(
           this.options.minZoom,
           minZoomX,
@@ -295,7 +295,7 @@ function domPanZoomWrapper() {
         var touchEventsCenterDiff = {
           x: touchEventsCenter.clientX - this.touchEventsCenterCache.clientX,
           y: touchEventsCenter.clientY - this.touchEventsCenterCache.clientY
-        }
+        };
         this.x = this.xCache + touchEventsCenterDiff.x;
         this.y = this.yCache + touchEventsCenterDiff.y;
 
@@ -467,6 +467,27 @@ function domPanZoomWrapper() {
 
   // Sanitize zoom value
   domPanZoom.prototype.sanitizeZoom = function (zoom) {
+    // Get values for 'cover' and 'contain'
+    if (zoom == 'cover' || zoom == 'contain') {
+      var wrapper = this.getWrapper();
+      var container = this.getContainer();
+
+      var maxWidth = wrapper.clientWidth;
+      var maxHeight = wrapper.clientHeight;
+
+      var panZoomWidth = container.clientWidth;
+      var panZoomHeight = container.clientHeight;
+
+      var minZoomX = maxWidth / panZoomWidth;
+      var minZoomY = maxHeight / panZoomHeight;
+
+      if (zoom == 'cover') {
+        zoom = Math.max(minZoomX, minZoomY);
+      } else {
+        zoom = Math.min(minZoomX, minZoomY);
+      }
+    }
+
     // Adjust for minZoom
     if (zoom < this.options.minZoom) {
       zoom = this.options.minZoom;

@@ -20,6 +20,12 @@
       <!-- Demo 1 -->
 
       <div class="demo__container -demo1">
+        <div class="">
+          <h3 class="demo__title">Playground</h3>
+          <div class="demo__description">
+            This demo has the option <code>bounds</code> disabled so we can test most available methods.
+          </div>
+        </div>
         <div class="dompanzoom__wrapper">
           <div class="dompanzoom__container">
             <img
@@ -122,7 +128,7 @@
             wrapperElement: '.demo__container.-demo1 .dompanzoom__wrapper',
             panZoomElement: '.demo__container.-demo1 .dompanzoom__container',
             bounds: false,
-            center: true,
+            initialZoom: 'cover',
             onChange: function () {
               document.querySelector(
                 '.demo__container.-demo1 .dompanzoom__info.-zoom span'
