@@ -48,7 +48,7 @@ function domPanZoomWrapper() {
       transitionSpeed: 400,
 
       // Events
-      // TODO test
+      // TODO test and demo
       onInit: null,
       onChange: null,
       onZoom: null,
@@ -74,7 +74,8 @@ function domPanZoomWrapper() {
 
     // Cache
     this.evCache = [];
-    this.curDiffCache = 0;
+    this.pinchDiffCache = 0;
+    this.pinchMoveCache = null;
 
     // Attach events
     this.attachEvents();
@@ -236,12 +237,18 @@ function domPanZoomWrapper() {
     var pointerDownEvent = function (ev) {
       this.evCache.push(ev);
       this.zoomCache = this.zoom;
+      this.xCache = this.x;
+      this.yCache = this.y;
       if (this.evCache.length == 2) {
-        this.curDiffCache = this.getTouchEventsDistance(
+        this.blockPan = true;
+        this.pinchDiffCache = this.getTouchEventsDistance(
           this.evCache[0],
           this.evCache[1]
         );
-        this.blockPan = true;
+        this.touchEventsCenterCache = this.getTouchEventsCenter(
+          this.evCache[0],
+          this.evCache[1]
+        );
       }
     }.bind(this);
 
@@ -260,24 +267,23 @@ function domPanZoomWrapper() {
       // Proceed if two touch gestures detected
       if (this.evCache.length == 2) {
         // Calculate distance between fingers
-        var curDiff = this.getTouchEventsDistance(
+        var pinchDiff = this.getTouchEventsDistance(
           this.evCache[0],
           this.evCache[1]
         );
-        curDiff -= this.curDiffCache;
+        pinchDiff -= this.pinchDiffCache;
 
-        var curDiffPercent = curDiff / this.getContainer().clientWidth;
-        curDiffPercent *= this.options.zoomSpeedPinch;
-        curDiffPercent += 1;
+        var pinchDiffPercent = pinchDiff / this.getContainer().clientWidth;
+        pinchDiffPercent *= this.options.zoomSpeedPinch;
+        pinchDiffPercent += 1;
 
-        var nextZoom = this.sanitizeZoom(this.zoomCache * curDiffPercent);
+        var nextZoom = this.sanitizeZoom(this.zoomCache * pinchDiffPercent);
 
         // Get offset to center, then adjust
         var touchEventsCenter = this.getTouchEventsCenter(
           this.evCache[0],
           this.evCache[1]
         );
-
         var offsetToCenter = this.getEventOffsetToCenter({
           target: this.evCache[0].target,
           clientX: touchEventsCenter.clientX,
@@ -285,15 +291,21 @@ function domPanZoomWrapper() {
         });
         this.adjustPositionByZoom(nextZoom, offsetToCenter.x, offsetToCenter.y);
 
-        // TODO calculate both finger movement and pan here
-        // TODO check fireing events
+        // Adjust position when moving while pinching
+        var touchEventsCenterDiff = {
+          x: touchEventsCenter.clientX - this.touchEventsCenterCache.clientX,
+          y: touchEventsCenter.clientY - this.touchEventsCenterCache.clientY
+        }
+        this.x = this.xCache + touchEventsCenterDiff.x;
+        this.y = this.yCache + touchEventsCenterDiff.y;
 
         // Update position
         this.zoom = nextZoom;
         this.setPosition(true);
 
-        // Trigger event
+        // Trigger events
         this.fireEvent('onZoom', this.getPosition());
+        this.fireEvent('onPan', this.getPosition());
       }
     }.bind(this);
 
