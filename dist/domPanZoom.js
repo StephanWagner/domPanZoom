@@ -33,6 +33,7 @@ function domPanZoomWrapper() {
       zoomSpeedWheel: 1,
 
       // The speed in which to zoom when pinching with touch gestures
+      // TODO this seems to not work correctly
       zoomSpeedPinch: 4,
 
       // Initial zoom
