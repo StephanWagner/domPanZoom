@@ -44,7 +44,18 @@ function domPanZoomWrapper() {
       initialPanX: 0,
       initialPanY: 0,
 
-      // Transition speed in milliseconds, higher values are slower
+      // Prefer scrolling the page to zooming with mousewheel or panning with touch event
+      // TODO how does google do it with tough events (use two fingers) ??
+      // TODO
+      preferPageScroll: true,
+
+      // The text to show when the option preferPageScroll is enabled
+      preferPageScrollText: {
+        // TODO
+        // Differentiate between mac and windows
+      },
+
+      // Transition speed for panning and zooming in milliseconds, higher values are slower
       transitionSpeed: 400,
 
       // Events

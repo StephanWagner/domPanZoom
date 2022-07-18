@@ -45,7 +45,18 @@ function domPanZoomWrapper() {
       initialPanX: 0,
       initialPanY: 0,
 
-      // Transition speed in milliseconds, higher values are slower
+      // Prefer scrolling the page to zooming with mousewheel or panning with touch event
+      // TODO how does google do it with tough events (use two fingers) ??
+      // TODO
+      preferPageScroll: true,
+
+      // The text to show when the option preferPageScroll is enabled
+      preferPageScrollText: {
+        // TODO
+        // Differentiate between mac and windows
+      },
+
+      // Transition speed for panning and zooming in milliseconds, higher values are slower
       transitionSpeed: 400,
 
       // Events
@@ -487,9 +498,6 @@ function domPanZoomWrapper() {
       } else {
         zoom = Math.min(minZoomX, minZoomY);
       }
-
-      // Center position
-      this.center(true, true);
     }
 
     // Adjust for minZoom
@@ -581,8 +589,8 @@ function domPanZoomWrapper() {
   };
 
   // Center container within wrapper
-  domPanZoom.prototype.center = function (instant, ignorePositioning) {
-    return this.panTo(50, 50, instant, ignorePositioning);
+  domPanZoom.prototype.center = function (instant) {
+    return this.panTo(50, 50, instant);
   };
 
   // Getters for pan
@@ -618,7 +626,7 @@ function domPanZoomWrapper() {
   };
 
   // Pan to position
-  domPanZoom.prototype.panTo = function (x, y, instant, ignorePositioning) {
+  domPanZoom.prototype.panTo = function (x, y, instant) {
     var wrapper = this.getWrapper();
     var container = this.getContainer();
 
@@ -633,10 +641,8 @@ function domPanZoomWrapper() {
     this.x = panX;
     this.y = panY;
 
-    if (!ignorePositioning) {
-      // Update position
-      this.setPosition(instant);
-    }
+    // Update position
+    this.setPosition(instant);
 
     // Trigger event
     this.fireEvent('onPan', this.getPosition());
