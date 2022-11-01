@@ -493,6 +493,9 @@ function domPanZoomWrapper() {
       var minZoomX = maxWidth / panZoomWidth;
       var minZoomY = maxHeight / panZoomHeight;
 
+      // TODO is first cebter OK?
+      this.center(true, true);
+
       if (zoom == 'cover') {
         zoom = Math.max(minZoomX, minZoomY);
       } else {
@@ -589,8 +592,8 @@ function domPanZoomWrapper() {
   };
 
   // Center container within wrapper
-  domPanZoom.prototype.center = function (instant) {
-    return this.panTo(50, 50, instant);
+  domPanZoom.prototype.center = function (instant, ignorePosition) {
+    return this.panTo(50, 50, instant, ignorePosition);
   };
 
   // Getters for pan
@@ -626,7 +629,7 @@ function domPanZoomWrapper() {
   };
 
   // Pan to position
-  domPanZoom.prototype.panTo = function (x, y, instant) {
+  domPanZoom.prototype.panTo = function (x, y, instant, ignorePosition) {
     var wrapper = this.getWrapper();
     var container = this.getContainer();
 
@@ -642,7 +645,9 @@ function domPanZoomWrapper() {
     this.y = panY;
 
     // Update position
-    this.setPosition(instant);
+    if (!ignorePosition) {
+      this.setPosition(instant);
+    }
 
     // Trigger event
     this.fireEvent('onPan', this.getPosition());
