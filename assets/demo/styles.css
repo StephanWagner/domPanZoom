@@ -48,7 +48,7 @@
 /* Scaffold */
 
 body {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: "Open Sans", sans-serif;
   background: #ddd;
   color: #222;
   font-size: 16px;
@@ -70,27 +70,19 @@ body {
 /* Header */
 
 .demo__header {
-  padding: 32px 0;
-  background: linear-gradient(45deg, #3d4966, #596580);
+  padding: 48px 0;
+  background: linear-gradient(45deg, #3f5773, #475e7b);
 }
 
-.demo__header h1,
-.demo__header h2 {
+.demo__header h1 {
   color: #fff;
   text-align: center;
   line-height: 1;
   font-weight: normal;
-  font-family: "Source Serif Pro";
-}
-
-.demo__header h1 {
+  font-family: "Quattrocento";
   font-size: 46px;
-  margin: 0 0 24px;
-}
-
-.demo__header h2 {
-  font-size: 32px;
   margin: 0;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
 }
 
 /* Demo container */
@@ -101,9 +93,9 @@ body {
 
 .demo__title {
   margin: 0 0 16px;
-  font-size: 36px;
+  font-size: 34px;
   line-height: 1.2;
-  font-weight: 600;
+  font-weight: 500;
   text-align: center;
 }
 
