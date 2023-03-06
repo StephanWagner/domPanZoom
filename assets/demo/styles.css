@@ -100,16 +100,16 @@ body {
 }
 
 .demo__title {
-  margin: 0 0 8px;
-  font-size: 28px;
+  margin: 0 0 16px;
+  font-size: 36px;
   line-height: 1.2;
-  font-weight: bold;
+  font-weight: 600;
   text-align: center;
 }
 
 .demo__description {
   text-align: center;
-  margin: 0 0 16px;
+  margin: 0 0 24px;
 }
 
 .demo__description code {
