@@ -1,37 +1,46 @@
 /* Fonts */
 
 @font-face {
-  font-family: 'Source Sans Pro';
-  src: url('./fonts/webfonts/SourceSansPro/SourceSansPro-Regular.woff2') format('woff2'),
-    url('./fonts/webfonts/SourceSansPro/SourceSansPro-Regular.woff') format('woff');
+  font-family: "Source Sans Pro";
+  src: url("./fonts/webfonts/SourceSansPro/SourceSansPro-Regular.woff2") format("woff2"),
+    url("./fonts/webfonts/SourceSansPro/SourceSansPro-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
 @font-face {
-  font-family: 'Source Sans Pro';
-  src: url('./fonts/webfonts/SourceSansPro/SourceSansPro-Bold.woff2') format('woff2'),
-    url('./fonts/webfonts/SourceSansPro/SourceSansPro-Bold.woff') format('woff');
+  font-family: "Source Sans Pro";
+  src: url("./fonts/webfonts/SourceSansPro/SourceSansPro-SemiBold.woff2") format("woff2"),
+    url("./fonts/webfonts/SourceSansPro/SourceSansPro-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("./fonts/webfonts/SourceSansPro/SourceSansPro-Bold.woff2") format("woff2"),
+    url("./fonts/webfonts/SourceSansPro/SourceSansPro-Bold.woff") format("woff");
   font-weight: bold;
   font-style: normal;
   font-display: block;
 }
 
 @font-face {
-  font-family: 'Nunito';
-  src: url('./fonts/webfonts/Nunito/Nunito-Regular.woff2') format('woff2'),
-    url('./fonts/webfonts/Nunito/Nunito-Regular.woff') format('woff');
+  font-family: "Source Serif Pro";
+  src: url("./fonts/webfonts/SourceSerifPro/SourceSerifPro-Regular.woff2") format("woff2"),
+    url("./fonts/webfonts/SourceSerifPro/SourceSerifPro-Regular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
 @font-face {
-  font-family: 'Nunito';
-  src: url('./fonts/webfonts/Nunito/Nunito-Bold.woff2') format('woff2'),
-    url('./fonts/webfonts/Nunito/Nunito-Bold.woff') format('woff');
-  font-weight: bold;
+  font-family: "Source Serif Pro";
+  src: url("./fonts/webfonts/SourceSerifPro/SourceSerifPro-SemiBold.woff2") format("woff2"),
+    url("./fonts/webfonts/SourceSerifPro/SourceSerifPro-SemiBold.woff") format("woff");
+  font-weight: 600;
   font-style: normal;
   font-display: block;
 }
@@ -39,7 +48,7 @@
 /* Scaffold */
 
 body {
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: "Source Sans Pro", sans-serif;
   background: #ddd;
   color: #222;
   font-size: 16px;
@@ -51,7 +60,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 
 *,
 *::before,
@@ -70,9 +78,9 @@ body {
 .demo__header h2 {
   color: #fff;
   text-align: center;
-  font-family: 'Nunito', sans-serif;
   line-height: 1;
-  font-weight: bold;
+  font-weight: normal;
+  font-family: "Source Serif Pro";
 }
 
 .demo__header h1 {
@@ -95,7 +103,6 @@ body {
   margin: 0 0 8px;
   font-size: 28px;
   line-height: 1.2;
-  font-family: 'Nunito', sans-serif;
   font-weight: bold;
   text-align: center;
 }
@@ -107,7 +114,7 @@ body {
 
 .demo__description code {
   font-family: monospace;
-  color: #A93226;
+  color: #a93226;
 }
 
 /* Infos */
@@ -191,7 +198,7 @@ body {
 
 .dompanzoom__wrapper:before,
 .dompanzoom__wrapper:after {
-  content: '';
+  content: "";
   position: absolute;
   z-index: 200;
   background: #000;
