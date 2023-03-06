@@ -125,31 +125,30 @@ body {
 }
 
 .dompanzoom__infos-container {
-  margin: 16px -8px;
+  margin: 8px -4px;
   display: flex;
 }
 
 .dompanzoom__info {
   font-family: monospace;
   font-size: 14px;
-  margin: 0 8px;
+  margin: 0 4px;
   background: #fff;
-  height: 32px;
-  line-height: 32px;
-  border-radius: 16px;
+  border-bottom: 2px solid #000;
+  height: 36px;
+  line-height: 36px;
   padding: 0 12px;
-  width: calc(33.333% - 16px);
+  width: calc(33.333% - 4px - 4px);
 }
 
 /* Controls */
 
 .dompanzoom__controls-container {
   background: #fff;
-  height: 32px;
-  padding: 4px;
+  height: 36px;
+  padding: 6px 0;
   display: flex;
-  border-radius: 16px;
-  margin: 0 auto 8px;
+  margin: 0 auto 3px;
 }
 
 .dompanzoom__controls-container label,
@@ -158,27 +157,25 @@ body {
   box-shadow: none;
   height: 24px;
   line-height: 24px;
-  border-radius: 12px;
-  padding: 0 12px;
   font-size: 14px;
   border: 0;
-  font-weight: bold;
+  font-weight: 600;
   white-space: nowrap;
 }
 
 .dompanzoom__controls-container label {
   flex-shrink: 0;
   width: 70px;
-  padding: 0 8px;
-  color: #666;
+  padding: 0 12px;
 }
 
 .dompanzoom__controls-container button {
-  padding: 0 12px;
+  padding: 0 8px;
   background: #596580;
   color: #fff;
   cursor: pointer;
   transition: background-color 250ms;
+  border-radius: 4px;
 }
 
 .dompanzoom__controls-container button:hover {
