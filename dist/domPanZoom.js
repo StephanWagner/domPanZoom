@@ -606,27 +606,21 @@ function domPanZoomWrapper() {
   };
 
   domPanZoom.prototype.getPanX = function (pixelValues) {
-    if (pixelValues) {
-      return this.x;
-    }
     var wrapper = this.getWrapper();
     var container = this.getContainer();
     var panX = wrapper.clientWidth * 0.5 + this.x * -1;
     panX += (this.zoom - 1) * (container.clientWidth * 0.5);
     var percentX = (panX / (container.clientWidth * this.zoom)) * 100;
-    return percentX;
+    return pixelValues ? panX : percentX;
   };
 
   domPanZoom.prototype.getPanY = function (pixelValues) {
-    if (pixelValues) {
-      return this.y;
-    }
     var wrapper = this.getWrapper();
     var container = this.getContainer();
     var panY = wrapper.clientHeight * 0.5 + this.y * -1;
     panY += (this.zoom - 1) * (container.clientHeight * 0.5);
     var percentY = (panY / (container.clientHeight * this.zoom)) * 100;
-    return percentY;
+    return pixelValues ? panY : percentY;
   };
 
   // Pan to position
